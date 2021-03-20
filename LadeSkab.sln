@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LadeSkab", "LadeSkab\LadeSkab.csproj", "{6038D937-6267-493C-95B4-64AA98A830BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LadeSkab", "LadeSkab\LadeSkab.csproj", "{6038D937-6267-493C-95B4-64AA98A830BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestLadeSkab", "NUnitTestLadeSkab\NUnitTestLadeSkab.csproj", "{38CE94C0-A90E-4452-8E21-760F9976128D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NUnitTestLadeSkab", "NUnitTestLadeSkab\NUnitTestLadeSkab.csproj", "{38CE94C0-A90E-4452-8E21-760F9976128D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LadeskabLibrary", "LadeskabLibrary\LadeskabLibrary.csproj", "{B31182A5-2E28-495A-A440-E9AA9B570AA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{38CE94C0-A90E-4452-8E21-760F9976128D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38CE94C0-A90E-4452-8E21-760F9976128D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38CE94C0-A90E-4452-8E21-760F9976128D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B31182A5-2E28-495A-A440-E9AA9B570AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B31182A5-2E28-495A-A440-E9AA9B570AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B31182A5-2E28-495A-A440-E9AA9B570AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B31182A5-2E28-495A-A440-E9AA9B570AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
