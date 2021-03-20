@@ -92,8 +92,13 @@ C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLa
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.csprojAssemblyReference.cache
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.AssemblyInfoInputs.cache
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.AssemblyInfo.cs
-C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.csproj.CoreCompileInputs.cache
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.csproj.CopyComplete
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.dll
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.pdb
 C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.genruntimeconfig.cache
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.Extension.NUnit.Xml.TestLogger.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.Extension.NUnit.Xml.TestAdapter.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\bin\Debug\netcoreapp3.1\Spekt.TestLogger.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\bin\Debug\netcoreapp3.1\Castle.Core.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\bin\Debug\netcoreapp3.1\NSubstitute.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\NUnitTestLadeSkab\obj\Debug\netcoreapp3.1\NUnitTestLadeSkab.csproj.CoreCompileInputs.cache

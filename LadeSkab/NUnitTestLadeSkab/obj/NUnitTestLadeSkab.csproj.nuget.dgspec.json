@@ -104,6 +104,10 @@
               "target": "Package",
               "version": "[16.5.0, )"
             },
+            "NSubstitute": {
+              "target": "Package",
+              "version": "[4.2.2, )"
+            },
             "NUnit": {
               "target": "Package",
               "version": "[3.12.0, )"
@@ -111,6 +115,10 @@
             "NUnit3TestAdapter": {
               "target": "Package",
               "version": "[3.16.1, )"
+            },
+            "NunitXml.TestLogger": {
+              "target": "Package",
+              "version": "[3.0.97, )"
             }
           },
           "imports": [
