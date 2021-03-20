@@ -1,0 +1,13 @@
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\bin\Debug\netcoreapp3.1\LadeSkab.exe
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\bin\Debug\netcoreapp3.1\LadeSkab.deps.json
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\bin\Debug\netcoreapp3.1\LadeSkab.runtimeconfig.json
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\bin\Debug\netcoreapp3.1\LadeSkab.runtimeconfig.dev.json
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\bin\Debug\netcoreapp3.1\LadeSkab.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\bin\Debug\netcoreapp3.1\LadeSkab.pdb
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.csprojAssemblyReference.cache
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.AssemblyInfoInputs.cache
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.AssemblyInfo.cs
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.csproj.CoreCompileInputs.cache
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.dll
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.pdb
+C:\Users\Bruger\source\repos\ayaanxali\SWT_Gruppe33_HandIn2\LadeSkab\LadeSkab\obj\Debug\netcoreapp3.1\LadeSkab.genruntimeconfig.cache
