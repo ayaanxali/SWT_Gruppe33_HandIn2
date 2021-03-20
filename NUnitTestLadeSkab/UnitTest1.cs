@@ -1,12 +1,15 @@
 using NUnit.Framework;
+using LadeSkab; 
 
 namespace NUnitTestLadeSkab
 {
-    public class Tests
+    public class TestStationControl
     {
+
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]
