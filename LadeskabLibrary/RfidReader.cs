@@ -11,7 +11,7 @@ namespace LadeskabLibrary
 
         public void SetRfidTag(int RfidTag)
         {
-            if (RfidTag < 0000)
+            if (RfidTag > 0000 && RfidTag<10000)
             {
                 Console.WriteLine("false id");
                 // muligvis en exception 

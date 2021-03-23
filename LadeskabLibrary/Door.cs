@@ -8,7 +8,7 @@ namespace LadeskabLibrary
     public class Door : IDoor
     {
         public event EventHandler<ChangeDoorStatusEvent> DoorChangedEvent;
-        public bool oldStatus;
+        public bool oldStatus { get; set; }
 
         public void LockDoor()
         {
@@ -23,6 +23,10 @@ namespace LadeskabLibrary
         }
 
 
+        /// <summary>
+        /// metoden ser på om døren er åben eller lukket ved brug af en bool. true for åben dør. false for lukket. 
+        /// </summary>
+        /// <param name="newstatus"></param>
         public void SetDoorStatus(bool newstatus)
         {
             if (newstatus != oldStatus)

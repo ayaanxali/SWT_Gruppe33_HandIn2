@@ -15,6 +15,7 @@ namespace LadeSkab
             IUsbCharger usbCharger = new UsbChargerSimulator();
             IRfidReader rfidReader = new RfidReader();
             IChargeControl charge = new ChargeControl(usbCharger);
+            StationControl stationControl = new StationControl(rfidReader,door, charge,display);
 
             bool finish = false;
             do

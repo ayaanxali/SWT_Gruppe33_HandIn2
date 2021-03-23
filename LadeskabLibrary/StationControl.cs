@@ -9,7 +9,7 @@ namespace LadeskabLibrary
     public class StationControl
     {
         // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        private enum LadeskabState
+        public enum LadeskabState
         {
             Available,
             Locked,
@@ -18,21 +18,27 @@ namespace LadeskabLibrary
         };
 
         // Her mangler flere member variable
-        private LadeskabState _state;
+        public LadeskabState _state;
         private IChargeControl _charger;
         private int _oldId;
         private IDoor _door;
-        private IDisplay display;
+        private IDisplay _display;
+        private IRfidReader _rfidReader;
         private bool doorStatus { get; set; }
 
         private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
-        public StationControl(IRfidReader RfidReader, IDoor door)
+        public StationControl(IRfidReader RfidReader, IDoor door, IChargeControl charger, IDisplay display)
         {
-            //this method:HandleRfidDetectedEvent will be called when new data are ready
-            RfidReader.RfidReaderEvent += HandleRfidDetectedEvent;
-            door.DoorChangedEvent += HandleDoorStatusEvent;
+            _door = door;
+            _charger = charger;
+            _display = display;
+            _rfidReader = RfidReader;
+
+                //this method:HandleRfidDetectedEvent & m.m will be called when new data are ready
+            _rfidReader.RfidReaderEvent += HandleRfidDetectedEvent;
+            _door.DoorChangedEvent += HandleDoorStatusEvent;
         }
         
 
@@ -42,7 +48,7 @@ namespace LadeskabLibrary
         }
 
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        private void RfidDetected(int id)
+        public void RfidDetected(int id)
         {
             switch (_state)
             {
@@ -62,14 +68,14 @@ namespace LadeskabLibrary
                                 writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
                             }
 
-                            display.ShowOccupiedLocker();
+                            _display.ShowOccupiedLocker();
                             //Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
                             _state = LadeskabState.Locked;
                         
                     }
                     else
                     {
-                        display.ShowConnectionIsFailed();
+                        _display.ShowConnectionIsFailed();
                         //Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
                     }
 
@@ -77,7 +83,7 @@ namespace LadeskabLibrary
 
                 case LadeskabState.DoorOpen:
                     // Ignore
-                    //display.ShowConnectPhone();
+                    
                     DoorOpened();
                     //_state = LadeskabState.Available;
                     break;
@@ -93,32 +99,32 @@ namespace LadeskabLibrary
                             writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
                         }
 
-                        display.ShowCorrectId();
+                        _display.ShowCorrectId();
                         //Console.WriteLine("Tag din telefon ud af skabet og luk døren");
                         _state = LadeskabState.Available;
                     }
                     else
                     {
-                        display.ShowWrongId();
+                        _display.ShowWrongId();
                         //Console.WriteLine("Forkert RFID tag");
                     }
 
                     break;
-                //case LadeskabState.DoorClosed:
-                  //  DoorClosed();
-                   // _state = LadeskabState.Available;
-                //break;
+                case LadeskabState.DoorClosed:
+                    DoorClosed();
+
+                    break;
             }
         }
 
-        private void DoorOpened()
+        public void DoorOpened()
         {
-            display.ShowConnectPhone();
+            _display.ShowConnectPhone();
         }
 
-        private void DoorClosed()
+        public void DoorClosed()
         {
-            display.ShowScanRfid();
+            _display.ShowScanRfid();
         }
 
         public void DoorStatusChanged()
@@ -128,9 +134,9 @@ namespace LadeskabLibrary
                 _state = LadeskabState.DoorOpen;
             }
             else
-                _state = LadeskabState.DoorOpen;
+                _state = LadeskabState.DoorClosed;
         }
-        // Her mangler de andre trigger handlere
+        //Her mangler de andre trigger handlere
         private void HandleDoorStatusEvent(object sender, ChangeDoorStatusEvent e)
         {
             doorStatus = e.Status;
