@@ -8,7 +8,11 @@ namespace NUnitTestLadeSkab
         private IUsbCharger chargerSimulator;
 
         private bool _isConnected;
+
+        public bool ConnectedStatus { get; set; } 
         //public event EventHandler<ChargingEventArg> ChargingEvent;
+        public bool StartChargeIsActivated = false;
+        public bool StopChargeIsActivated = false;
 
         public FakeChargeControl(IUsbCharger chargerSimulator_)
         {
@@ -16,26 +20,23 @@ namespace NUnitTestLadeSkab
         }
         public bool IsConnected()
         {
-            bool isConnected = chargerSimulator.Connected;
+            _isConnected = ConnectedStatus;
 
-            return isConnected;
+            return _isConnected;
 
-        }
-
-        bool IChargeControl.IsConnected
-        {
-            get => _isConnected;
-            set => _isConnected = value;
         }
 
         public void StartCharge()
         {
             chargerSimulator.StartCharge();
+            StartChargeIsActivated = true; 
         }
 
         public void StopCharge()
         {
             chargerSimulator.StopCharge();
+            StopChargeIsActivated = true;
+
         }
 
         //protected virtual void OnCharging(ChargingEventArg e)

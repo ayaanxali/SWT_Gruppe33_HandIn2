@@ -10,12 +10,17 @@ namespace LadeSkab
             // Assemble your system here from all the classes
 
 
-            IDoor door = new Door();
-            IDisplay display = new Display();
-            IUsbCharger usbCharger = new UsbChargerSimulator();
-            IRfidReader rfidReader = new RfidReader();
-            IChargeControl charge = new ChargeControl(usbCharger);
-            StationControl stationControl = new StationControl(rfidReader,door,charge,display);
+            //IDoor door = new Door();
+            //isplay display = new Display();
+          //IUsbCharger usbCharger = new UsbChargerSimulator();
+            //IRfidReader rfidReader = new RfidReader();
+
+            Door door = new Door();
+            Display display = new Display();
+            var usbCharger = new UsbChargerSimulator();
+            RfidReader rfidReader = new RfidReader();
+            ChargeControl chargeControl = new ChargeControl(usbCharger);
+            StationControl stationControl = new StationControl(rfidReader,door,chargeControl,display);
 
             bool finish = false;
             do

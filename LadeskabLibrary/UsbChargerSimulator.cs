@@ -16,8 +16,9 @@ namespace LadeskabLibrary
     private const int CurrentTickInterval = 250; // ms
 
     public event EventHandler<CurrentEventArgs> CurrentValueEvent;
+    //public event EventHandler<ChargingEventArg> ChargingEvent;
 
-    public double CurrentValue { get; private set; }
+        public double CurrentValue { get; private set; }
 
     public bool Connected { get;  set; }
 
@@ -116,5 +117,9 @@ namespace LadeskabLibrary
     {
         CurrentValueEvent?.Invoke(this, new CurrentEventArgs() {Current = this.CurrentValue});
     }
+    //protected virtual void OnCharging(ChargingEventArg e)
+    //{
+    //    ChargingEvent?.Invoke(this,e);
+    //}
     }
 }

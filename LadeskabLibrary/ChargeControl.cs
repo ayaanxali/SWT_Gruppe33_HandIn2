@@ -10,6 +10,7 @@ namespace LadeskabLibrary
         private IUsbCharger chargerSimulator;
         private bool _isConnected;
 
+       
         public ChargeControl(IUsbCharger chargerSimulator_)
         {
             chargerSimulator = chargerSimulator_;
@@ -23,11 +24,11 @@ namespace LadeskabLibrary
 
         }
 
-        bool IChargeControl.IsConnected
-        {
-            get => _isConnected;
-            set => _isConnected = value;
-        }
+        //bool IChargeControl.IsConnected
+        //{
+        //    get => _isConnected;
+        //    set => _isConnected = value;
+        //}
 
         public void StartCharge()
         {
