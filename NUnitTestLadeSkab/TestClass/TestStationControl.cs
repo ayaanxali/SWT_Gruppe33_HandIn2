@@ -11,7 +11,7 @@ namespace NUnitTestLadeSkab
 {
     public class TestStationControl
     {
-       // private FakeDoor fakeDoor;
+       private FakeDoor fakeDoor;
         //private FakeRfidReader fakeRfidReader;
         private FakeChargeControl fakeChargeControl;
        // private FakeUsbCharger fakeUsb;
@@ -23,6 +23,7 @@ namespace NUnitTestLadeSkab
         public IChargeControl ChargeControl;
         public IUsbCharger UsbChargerSimo;
         public StationControl uut;
+        public StationControl uut2;
 
 
         [SetUp]
@@ -34,9 +35,10 @@ namespace NUnitTestLadeSkab
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
             ChargeControl = NSubstitute.Substitute.For<IChargeControl>();
             
+            fakeDoor = new FakeDoor();
             fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
             uut = new StationControl(rfidReader, Door,fakeChargeControl,display);
-            //var uut2 = new StationControl(rfidReader,fakeDoor,fakeChargeControl,display);
+           
         }
 
         [Test]
@@ -66,12 +68,15 @@ namespace NUnitTestLadeSkab
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodShowOccupiedLockerRecievedOne()
         {
-            int id = 1200;
+            int newId = 1200;
             uut._state = StationControl.LadeskabState.Available;
             //UsbChargerSimo.Connected = true;
             fakeChargeControl.ConnectedStatus = true;
-
-            uut.RfidDetected(id);
+            
+            //act
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = newId });
+            //bedre at bruge end metoden under som burde gøres private igen. 
+           // uut.RfidDetected(id);
 
            // Door.Received(1).LockDoor();
             display.Received(1).ShowOccupiedLocker();
@@ -206,21 +211,32 @@ namespace NUnitTestLadeSkab
         }
 
         [Test]
-        public void ChangedDoorStatus_SwitchCaseDoorOpen_Is()
-        {
-
-        }
-
-        [Test]
         public void ChangedDoorStatus_SwitchCaseDoorClosed_is()
         {
 
         }
 
         [Test]
-        public void DoorEvent()
+        public void DoorEvent_SetDoorStatusIsTrue_SwitchCaseIsDoorOpen()
         {
-            
+            uut2 = new StationControl(rfidReader,fakeDoor,ChargeControl,display);
+            fakeDoor.oldStatus = false;
+
+            fakeDoor.SetDoorStatus(true);
+           // Door.SetDoorStatus(true);
+            Assert.That(uut2._state, Is.EqualTo(uut2._state= StationControl.LadeskabState.DoorOpen));
+
+        }
+        [Test]
+        public void DoorEvent_SetDoorStatusIsFalse_SwitchCaseIsDoorClosed()
+        {
+            uut2 = new StationControl(rfidReader, fakeDoor, ChargeControl, display);
+            fakeDoor.oldStatus = true;
+
+            fakeDoor.SetDoorStatus(false);
+            // Door.SetDoorStatus(true);
+            Assert.That(uut2._state, Is.EqualTo(uut2._state = StationControl.LadeskabState.DoorClosed));
+
         }
     }
 }

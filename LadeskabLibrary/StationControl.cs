@@ -65,23 +65,6 @@ namespace LadeskabLibrary
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
         public void RfidDetected(int id)
         {
-            //if (_state == LadeskabState.Available && charging == false)
-            //{
-            //    _door.LockDoor();
-
-            //    _charger.StartCharge();
-            //    _oldId = id;
-            //    using (var writer = File.AppendText(logFile))
-            //    {
-            //        writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
-            //    }
-
-            //    _display.ShowOccupiedLocker();
-            //    //Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
-            //    charging = true;
-
-            //}
-            
             switch (_state)
             {
                 case LadeskabState.Available:

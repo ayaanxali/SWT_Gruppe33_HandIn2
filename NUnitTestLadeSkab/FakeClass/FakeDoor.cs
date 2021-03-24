@@ -8,8 +8,8 @@ namespace NUnitTestLadeSkab
     public class FakeDoor : IDoor
     {
         public event EventHandler<ChangeDoorStatusEvent> DoorChangedEvent;
-        public bool oldStatus;
 
+        public bool oldStatus { get; set; }
         public bool LockDoorIsActivated { get; set; }
         public bool UnLockDoorIsActivated { get; set; }
 
@@ -28,10 +28,9 @@ namespace NUnitTestLadeSkab
 
         public void SetDoorStatus(bool newstatus)
         {
-            if (newstatus != oldStatus)
+            if (newstatus!= oldStatus)
             {
                 DoorStatusChanged(new ChangeDoorStatusEvent { Status = newstatus });
-                oldStatus = newstatus;
             }
         }
 

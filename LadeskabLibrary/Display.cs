@@ -38,5 +38,10 @@ namespace LadeskabLibrary
         {
             Console.WriteLine("Indlæs Rfidtag");
         }
+
+        public void ShowMessage(string text)
+        {
+            Console.WriteLine(text);
+        }
     }
 }
