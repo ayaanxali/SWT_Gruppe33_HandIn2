@@ -17,7 +17,7 @@ namespace LadeskabLibrary
         double CurrentValue { get; }
 
         // Require connection status of the phone
-        bool Connected { get; }
+        bool Connected { get; set; }
         void SimulateConnected(bool connected);
 
         // Start charging

@@ -31,23 +31,46 @@ namespace NUnitTestLadeSkab
             display = NSubstitute.Substitute.For<IDisplay>();
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
 
-            fakeChargeControl = new FakeChargeControl(fakeUsb);
-            uut = new StationControl(rfidReader, Door, fakeChargeControl,display);
-            
-            
+            fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
+            uut = new StationControl(rfidReader, Door,ChargeControl,display);
+
+
         }
 
         [Test]
-        public void Test1( )
+        public void StationControl_AvailableStateAndChargeIsConnected_DoorIsLocked()
         {
+            int id = 1200;
             uut._state = StationControl.LadeskabState.Available;
-            fakeUsb.SimulateConnected(false);
-            rfidReader.SetRfidTag(1200);
+            UsbChargerSimo.Connected = true;
+
+            fakeDoor.DoorChangedEvent += Raise.EventWith(this, new ChangeDoorStatusEvent() {Status = true});
+
+
+            fakeDoor.Received(1).LockDoor();
+            //Door.Received(1).LockDoor();
+
+            //arrange
+            //rfidReader.SetRfidTag(id);
+
+            ////FakeChargeControl fakeChargeControl = new FakeChargeControl(fakeUsb);
+
+            //ChargeControl.IsConnected = true;
+            ////ChargeControl.IsConnected = true;
+            //uut.RfidDetected(id);
+
+            //act
+            // kald på rfiddetected-metoden, sæt tilstanden til available, charger er true, 
+
+
+            //fakeUsb.SimulateConnected(true);
+            //rfidReader.SetRfidTag(id);
             //uut.RfidDetected();
 
-
+            //assert
             // Assert.That(fakeDoor.UnLockDoorIsActivated, Is.EqualTo(true));
-            Door.Received(1).LockDoor();
+
+            //rfidReader.Received(1).SetRfidTag(id);
             //UsbChargerSimo.Received(1).StartCharge();
         }
 
@@ -56,10 +79,15 @@ namespace NUnitTestLadeSkab
         public void StationControl_DoorClosed_DisplayMessageShowRfid()
         {
             //arrange
-            
+            uut._state = StationControl.LadeskabState.DoorClosed;
+            UsbChargerSimo.Connected = true;
+
             //act
+            fakeDoor.DoorChangedEvent += Raise.EventWith(this, new ChangeDoorStatusEvent() { Status = true });
 
             //assert
+            display.Received(1).ShowScanRfid();
+            
 
         }
 
@@ -69,35 +97,4 @@ namespace NUnitTestLadeSkab
         // Test om telefonen oplades, når IsConnected() == true
         // Test om RFID-tag er forkert 
     }
-
-    class FakeChargeControl : IChargeControl
-    {
-        private IUsbCharger chargerSimulator;
-
-        public FakeChargeControl(IUsbCharger chargerSimulator_)
-        {
-            chargerSimulator = chargerSimulator_;
-        }
-        public bool IsConnected()
-        {
-            bool isConnected = chargerSimulator.Connected;
-
-            return isConnected;
-
-        }
-
-        public void StartCharge()
-        {
-            chargerSimulator.StartCharge();
-        }
-
-        public void StopCharge()
-        {
-            chargerSimulator.StopCharge();
-        }
-    }
-
-    
-
-    
 }

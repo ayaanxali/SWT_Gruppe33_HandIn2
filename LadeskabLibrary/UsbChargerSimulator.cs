@@ -19,7 +19,7 @@ namespace LadeskabLibrary
 
     public double CurrentValue { get; private set; }
 
-    public bool Connected { get; private set; }
+    public bool Connected { get;  set; }
 
     private bool _overload;
     private bool _charging;
@@ -74,34 +74,35 @@ namespace LadeskabLibrary
         _overload = overload;
     }
 
-    public void StartCharge()
-    {
-        // Ignore if already charging
-        if (!_charging)
+        public void StartCharge()
         {
-            if (Connected && !_overload)
+            Connected = true;
+            // Ignore if already charging
+            if (!_charging)
             {
-                CurrentValue = 500;
-            }
-            else if (Connected && _overload)
-            {
-                CurrentValue = OverloadCurrent;
-            }
-            else if (!Connected)
-            {
-                CurrentValue = 0.0;
-            }
+                if (Connected && !_overload)
+                {
+                    CurrentValue = 500;
+                }
+                else if (Connected && _overload)
+                {
+                    CurrentValue = OverloadCurrent;
+                }
+                else if (!Connected)
+                {
+                    CurrentValue = 0.0;
+                }
 
-            OnNewCurrent();
-            _ticksSinceStart = 0;
+                OnNewCurrent();
+                _ticksSinceStart = 0;
 
-            _charging = true;
+                _charging = true;
 
-            _timer.Start();
+                _timer.Start();
+            }
         }
-    }
 
-    public void StopCharge()
+        public void StopCharge()
     {
         _timer.Stop();
 

@@ -15,7 +15,7 @@ namespace LadeSkab
             IUsbCharger usbCharger = new UsbChargerSimulator();
             IRfidReader rfidReader = new RfidReader();
             IChargeControl charge = new ChargeControl(usbCharger);
-            StationControl stationControl = new StationControl(rfidReader,door, charge,display);
+            StationControl stationControl = new StationControl(rfidReader,door,charge,display);
 
             bool finish = false;
             do
@@ -43,6 +43,8 @@ namespace LadeSkab
                         string idString = System.Console.ReadLine();
 
                         int id = Convert.ToInt32(idString);
+                        //bool var = true;
+                        //var = charge.IsConnected();
                         rfidReader.SetRfidTag(id);
 
                         break;

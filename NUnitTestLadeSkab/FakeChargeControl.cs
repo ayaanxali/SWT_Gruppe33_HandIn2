@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System;
 using LadeskabLibrary;
 
-namespace LadeskabLibrary
+namespace NUnitTestLadeSkab
 {
-    public class ChargeControl : IChargeControl
+    class FakeChargeControl : IChargeControl
     {
         private IUsbCharger chargerSimulator;
-        private bool _isConnected;
 
-        public ChargeControl(IUsbCharger chargerSimulator_)
+        private bool _isConnected;
+        //public event EventHandler<ChargingEventArg> ChargingEvent;
+
+        public FakeChargeControl(IUsbCharger chargerSimulator_)
         {
             chargerSimulator = chargerSimulator_;
         }
-
         public bool IsConnected()
         {
             bool isConnected = chargerSimulator.Connected;
@@ -38,5 +37,10 @@ namespace LadeskabLibrary
         {
             chargerSimulator.StopCharge();
         }
+
+        //protected virtual void OnCharging(ChargingEventArg e)
+        //{
+        //    ChargingEvent?.Invoke(this,e);
+        //}
     }
 }
