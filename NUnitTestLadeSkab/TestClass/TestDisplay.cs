@@ -40,7 +40,7 @@ namespace NUnitTestLadeSkab
 
             display.ShowConnectPhone();
 
-            Assert.That();
+            
             Assert.That(display.ShowScanIsActivated, Is.True);
         }
 

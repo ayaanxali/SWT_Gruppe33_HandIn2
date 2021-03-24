@@ -11,8 +11,8 @@ namespace NUnitTestLadeSkab
 
         public bool ConnectedStatus { get; set; } 
         //public event EventHandler<ChargingEventArg> ChargingEvent;
-        public bool StartChargeIsActivated = false;
-        public bool StopChargeIsActivated = false;
+        public bool StartChargeIsActivated;
+        public bool StopChargeIsActivated;
 
         public FakeChargeControl(IUsbCharger chargerSimulator_)
         {

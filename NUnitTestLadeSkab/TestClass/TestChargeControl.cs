@@ -30,7 +30,10 @@ namespace NUnitTestLadeSkab
             Door = NSubstitute.Substitute.For<IDoor>();
             rfidReader = NSubstitute.Substitute.For<IRfidReader>();
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
-            
+            display = NSubstitute.Substitute.For<IDisplay>();
+            fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
+            stationControl = new StationControl(rfidReader,Door,fakeChargeControl,display);
+
 
             uut = new ChargeControl(UsbChargerSimo);
         }
@@ -38,36 +41,35 @@ namespace NUnitTestLadeSkab
         [Test]
         public void ChargeControl_PhoneIsConnected_StartCharging()
         {
-            //arrange
-            //fakeChargeControl.IsConnected();
+            int id = 1200;
+            stationControl.RfidDetected(id);
+            stationControl._state = StationControl.LadeskabState.Available;
+            fakeChargeControl.StartChargeIsActivated = true;
 
-            //act
-            //fakeUsb.StartCharge();
-            
-            //fakeUsb.SimulateConnected(true);
-            //fakeUsb.Connected = fakeUsb.StartChargeIsActivated;
-            //fakeUsb.StartChargeIsActivated = fakeChargeControl.IsConnected();
-            //fakeChargeControl.IsConnected();
-            bool var1 = true;
-            UsbChargerSimo.SimulateConnected(var1);
-            
-            var1 = fakeChargeControl.IsConnected();
-            
-            //assert
-            
-            //UsbChargerSimo.SimulateConnected(true);
-            //fakeUsb.StartChargeIsActivated = true;
-            //UsbChargerSimo.Connected = true;
+            uut.StartCharge();
 
-            Assert.That(fakeChargeControl.IsConnected,Is.EqualTo(var1));
-            
+            Assert.That(fakeChargeControl.StartChargeIsActivated, Is.True);
 
-            //fakeChargeControl.Received(1).StartCharge();
-            
 
         }
-        
-        
+        [Test]
+        public void ChargeControl_PhoneIsDisconnected_StopCharging()
+        {
+            int id = 1200;
+            stationControl.RfidDetected(id);
+            stationControl._state = StationControl.LadeskabState.Locked;
+            fakeChargeControl.StopChargeIsActivated = true;
+
+            uut.StopCharge();
+
+            Assert.That(fakeChargeControl.StopChargeIsActivated, Is.True);
+
+
+        }
+
+
+
+
     }
     
 }

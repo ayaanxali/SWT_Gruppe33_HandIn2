@@ -10,8 +10,8 @@ namespace NUnitTestLadeSkab
         public event EventHandler<ChangeDoorStatusEvent> DoorChangedEvent;
 
         public bool oldStatus { get; set; }
-        public bool LockDoorIsActivated { get; set; }
-        public bool UnLockDoorIsActivated { get; set; }
+        public bool LockDoorIsActivated;
+        public bool UnLockDoorIsActivated;
 
 
         public void LockDoor()
@@ -31,6 +31,7 @@ namespace NUnitTestLadeSkab
             if (newstatus!= oldStatus)
             {
                 DoorStatusChanged(new ChangeDoorStatusEvent { Status = newstatus });
+                oldStatus = newstatus;
             }
         }
 
