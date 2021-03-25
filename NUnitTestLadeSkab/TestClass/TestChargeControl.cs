@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using LadeskabLibrary;
-using LadeSkabNUnitTest;
+using LadeskabLibrary.AllInterfaces;
 using NSubstitute;
 
 namespace NUnitTestLadeSkab
@@ -11,15 +11,15 @@ namespace NUnitTestLadeSkab
     public class TestChargerControl
     {
         private FakeDoor fakeDoor;
-        private FakeRfidReader fakeRfidReader;
         private FakeChargeControl fakeChargeControl;
-        private FakeUsbCharger fakeUsb;
+        
 
         public IDoor Door;
         public IRfidReader rfidReader;
         public IDisplay display;
         public IChargeControl ChargeControl;
         public IUsbCharger UsbChargerSimo;
+        public ILogFile logFile;
         public StationControl stationControl;
         public ChargeControl uut;
 
@@ -32,7 +32,7 @@ namespace NUnitTestLadeSkab
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
             display = NSubstitute.Substitute.For<IDisplay>();
             fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
-            stationControl = new StationControl(rfidReader,Door,fakeChargeControl,display);
+            stationControl = new StationControl(rfidReader,Door,fakeChargeControl,display,logFile);
 
 
             uut = new ChargeControl(UsbChargerSimo);
@@ -42,9 +42,10 @@ namespace NUnitTestLadeSkab
         public void ChargeControl_PhoneIsConnected_StartCharging()
         {
             int id = 1200;
-            stationControl.RfidDetected(id);
             stationControl._state = StationControl.LadeskabState.Available;
             fakeChargeControl.StartChargeIsActivated = true;
+
+            stationControl.RfidDetected(id);
 
             uut.StartCharge();
 
@@ -56,8 +57,8 @@ namespace NUnitTestLadeSkab
         public void ChargeControl_PhoneIsDisconnected_StopCharging()
         {
             int id = 1200;
-            stationControl.RfidDetected(id);
             stationControl._state = StationControl.LadeskabState.Locked;
+            stationControl.RfidDetected(id);
             fakeChargeControl.StopChargeIsActivated = true;
 
             uut.StopCharge();
@@ -65,8 +66,30 @@ namespace NUnitTestLadeSkab
             Assert.That(fakeChargeControl.StopChargeIsActivated, Is.True);
 
 
+
         }
 
+        [Test]
+        public void Test1_ConnectedStatusIsFalse()
+        {
+            uut.ConnectedStatus = false;
+            uut.IsConnected();
+
+            Assert.That(uut.IsConnected, Is.False);
+
+        }
+        [Test]
+        public void Test1_ConnectedStatusIsTrue()
+        {
+            //int id = 1200;
+            //stationControl._state = StationControl.LadeskabState.Available;
+            //stationControl.RfidDetected(id);
+            //fakeChargeControl.StartChargeIsActivated = true;
+            uut.ConnectedStatus = true;
+            uut.IsConnected();
+
+            Assert.That(uut.IsConnected, Is.True);
+        }
 
 
 

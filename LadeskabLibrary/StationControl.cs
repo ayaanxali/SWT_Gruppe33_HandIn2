@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using LadeskabLibrary.AllInterfaces;
 
 
 namespace LadeskabLibrary
@@ -24,10 +25,11 @@ namespace LadeskabLibrary
         private IDoor _door;
         private IDisplay _display;
         private IRfidReader _rfidReader;
+        private ILogFile _logFile;
         private bool doorStatus { get; set; }
        // public bool charging = false;
 
-        private string logFile = "logfile.txt"; // Navnet på systemets log-fil
+        //private string logFile = "logfile.txt"; // Navnet på systemets log-fil
 
         // Her mangler constructor
         //public StationControl(IRfidReader RfidReader, IDoor door)
@@ -41,12 +43,13 @@ namespace LadeskabLibrary
         //}
 
 
-        public StationControl(IRfidReader RfidReader, IDoor door, IChargeControl charger, IDisplay display)
+        public StationControl(IRfidReader RfidReader, IDoor door, IChargeControl charger, IDisplay display, ILogFile logFile)
         {
             _door = door;
             _charger = charger;
             _display = display;
             _rfidReader = RfidReader;
+            _logFile = logFile;
 
             //this method:HandleRfidDetectedEvent & m.m will be called when new data are ready
             _rfidReader.RfidReaderEvent += HandleRfidDetectedEvent;
@@ -76,10 +79,8 @@ namespace LadeskabLibrary
 
                         _charger.StartCharge();
                         _oldId = id;
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", id);
-                        }
+
+                        _logFile.LockDoorLog(id);
 
                         _display.ShowOccupiedLocker();
                         //Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
@@ -106,19 +107,17 @@ namespace LadeskabLibrary
                     {
                         _charger.StopCharge();
                         _door.UnlockDoor();
-                        using (var writer = File.AppendText(logFile))
-                        {
-                            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", id);
-                        }
+                        
+                        _logFile.UnLockDoorLog(id);
 
                         _display.ShowCorrectId();
-                        //Console.WriteLine("Tag din telefon ud af skabet og luk døren");
+                        
                         _state = LadeskabState.Available;
                     }
                     else
                     {
                         _display.ShowWrongId();
-                        //Console.WriteLine("Forkert RFID tag");
+                        
                     }
 
                     break;

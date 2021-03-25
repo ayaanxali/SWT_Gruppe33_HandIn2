@@ -36,7 +36,6 @@ namespace NUnitTestLadeSkab
         {
             chargerSimulator.StopCharge();
             StopChargeIsActivated = true;
-
         }
 
         //protected virtual void OnCharging(ChargingEventArg e)

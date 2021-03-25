@@ -20,7 +20,8 @@ namespace LadeSkab
             var usbCharger = new UsbChargerSimulator();
             RfidReader rfidReader = new RfidReader();
             ChargeControl chargeControl = new ChargeControl(usbCharger);
-            StationControl stationControl = new StationControl(rfidReader,door,chargeControl,display);
+            LogFile logFile = new LogFile();
+            StationControl stationControl = new StationControl(rfidReader,door,chargeControl,display,logFile);
 
             bool finish = false;
             do
@@ -48,8 +49,7 @@ namespace LadeSkab
                         string idString = System.Console.ReadLine();
 
                         int id = Convert.ToInt32(idString);
-                        //bool var = true;
-                        //var = charge.IsConnected();
+                        
                         rfidReader.SetRfidTag(id);
 
                         break;

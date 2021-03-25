@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.ComTypes;
 using NUnit.Framework;
 using LadeSkab;
 using LadeskabLibrary;
-using LadeSkabNUnitTest;
+using LadeskabLibrary.AllInterfaces;
 using NSubstitute;
 using NuGet.Frameworks;
 
@@ -12,8 +12,7 @@ namespace NUnitTestLadeSkab
     public class TestStationControl
     {
        private FakeDoor fakeDoor;
-        //private FakeRfidReader fakeRfidReader;
-        private FakeChargeControl fakeChargeControl;
+       private FakeChargeControl fakeChargeControl;
        // private FakeUsbCharger fakeUsb;
 
        
@@ -22,6 +21,7 @@ namespace NUnitTestLadeSkab
         public IDisplay display;
         public IChargeControl ChargeControl;
         public IUsbCharger UsbChargerSimo;
+        public ILogFile logFile;
         public StationControl uut;
         public StationControl uut2;
 
@@ -34,10 +34,10 @@ namespace NUnitTestLadeSkab
             display = NSubstitute.Substitute.For<IDisplay>();
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
             ChargeControl = NSubstitute.Substitute.For<IChargeControl>();
-            
+            logFile = NSubstitute.Substitute.For<ILogFile>();
             fakeDoor = new FakeDoor();
             fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
-            uut = new StationControl(rfidReader, Door,fakeChargeControl,display);
+            uut = new StationControl(rfidReader, Door,fakeChargeControl,display, logFile);
            
         }
 
@@ -46,9 +46,8 @@ namespace NUnitTestLadeSkab
         {
             int id = 1200;
             uut._state = StationControl.LadeskabState.Available;
-            //UsbChargerSimo.Connected = true;
             fakeChargeControl.ConnectedStatus = true;
-            
+
             uut.RfidDetected(id);
 
             Door.Received(1).LockDoor();
@@ -68,19 +67,17 @@ namespace NUnitTestLadeSkab
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodShowOccupiedLockerRecievedOne()
         {
+            //arrange
             int newId = 1200;
             uut._state = StationControl.LadeskabState.Available;
-            //UsbChargerSimo.Connected = true;
             fakeChargeControl.ConnectedStatus = true;
             
             //act
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = newId });
-            //bedre at bruge end metoden under som burde gøres private igen. 
-           // uut.RfidDetected(id);
-
-           // Door.Received(1).LockDoor();
+            
+            //assert
             display.Received(1).ShowOccupiedLocker();
-            //Assert.That(fakeChargeControl.StartChargeIsActivated, Is.True);
+            
 
         }
         [Test]
@@ -88,7 +85,6 @@ namespace NUnitTestLadeSkab
         {
             int id = 1200;
             uut._state = StationControl.LadeskabState.Available;
-            //UsbChargerSimo.Connected = true;
             fakeChargeControl.ConnectedStatus = false;
 
             uut.RfidDetected(id);
@@ -211,15 +207,9 @@ namespace NUnitTestLadeSkab
         }
 
         [Test]
-        public void ChangedDoorStatus_SwitchCaseDoorClosed_is()
-        {
-
-        }
-
-        [Test]
         public void DoorEvent_SetDoorStatusIsTrue_SwitchCaseIsDoorOpen()
         {
-            uut2 = new StationControl(rfidReader,fakeDoor,ChargeControl,display);
+            uut2 = new StationControl(rfidReader,fakeDoor,ChargeControl,display,logFile);
             fakeDoor.oldStatus = false;
 
             fakeDoor.SetDoorStatus(true);
@@ -230,13 +220,26 @@ namespace NUnitTestLadeSkab
         [Test]
         public void DoorEvent_SetDoorStatusIsFalse_SwitchCaseIsDoorClosed()
         {
-            uut2 = new StationControl(rfidReader, fakeDoor, ChargeControl, display);
+            uut2 = new StationControl(rfidReader, fakeDoor, ChargeControl, display,logFile);
             fakeDoor.oldStatus = true;
 
             fakeDoor.SetDoorStatus(false);
             // Door.SetDoorStatus(true);
             Assert.That(uut2._state, Is.EqualTo(uut2._state = StationControl.LadeskabState.DoorClosed));
 
+        }
+
+        [Test]
+        public void SwicthCaseIsAvailable_LockDoorLogMethod_ReceivedIs1()
+        {
+            int id = 1200;
+            uut._state = StationControl.LadeskabState.Available;
+            //UsbChargerSimo.Connected = true;
+            fakeChargeControl.ConnectedStatus = true;
+
+            uut.RfidDetected(id);
+
+            logFile.Received(1).LockDoorLog(id);
         }
     }
 }

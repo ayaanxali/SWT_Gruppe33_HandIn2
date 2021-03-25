@@ -12,8 +12,4 @@ namespace LadeskabLibrary
         public bool IsConnected();
     }
 
-    public class ChargingEventArg : EventArgs
-    {
-        public bool Charging { get; set; }
-    }
 }

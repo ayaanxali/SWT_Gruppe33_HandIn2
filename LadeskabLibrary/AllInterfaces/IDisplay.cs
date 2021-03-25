@@ -12,6 +12,5 @@ namespace LadeskabLibrary
         public void ShowCorrectId();
         public void ShowWrongId();
         public void ShowScanRfid();
-        public void ShowMessage(string text);
     }
 }

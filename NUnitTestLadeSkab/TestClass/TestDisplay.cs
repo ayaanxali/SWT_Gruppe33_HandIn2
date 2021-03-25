@@ -1,3 +1,4 @@
+using System.IO;
 using System.Runtime.CompilerServices;
 using LadeskabLibrary;
 using NUnit.Framework;
@@ -6,42 +7,71 @@ namespace NUnitTestLadeSkab
 {
     class TestDisplay
     {
-        private FakeDisplay display;
-        private StationControl stationC;
-
-        private IUsbCharger usbCharger;
-        private IRfidReader rfidReader;
-        private IChargeControl chargeControl;
-        private IDoor Door;
+        private Display uut;
+        private StringWriter stringWriter;
 
         [SetUp]
         public void Setup()
         {
-            chargeControl = new ChargeControl(usbCharger);
-            display = new FakeDisplay();   
-            stationC = new StationControl(rfidReader,Door,chargeControl,display);
+            stringWriter = new StringWriter();
+            System.Console.SetOut(stringWriter);
+            uut = new Display();
         }
 
         [Test]
-        public void test1()
+        public void Display_ShowConnectPhone_ContainsCorrectString()
         {
-            string myString ="Hallo";
-            display.ShowMessage(myString);
+            uut.ShowConnectPhone();
+            stringWriter.ToString();
 
-           // Assert.That(myString, Is.EqualTo("Hello"));
-            Assert.AreEqual("Tilslut telefon", "Hallo");
+            Assert.That(stringWriter.ToString(), Does.Contain("Tilslut telefon"));
 
         }
 
         [Test]
-        public void test2()
+        public void Display_ShowScanRfid_ContainsCorrectString()
         {
-            //stationC.DoorClosed();
+            uut.ShowScanRfid();
+            stringWriter.ToString();
 
-            display.ShowConnectPhone();
-
+            Assert.That(stringWriter.ToString(), Does.Contain("Indlæs Rfidtag"));
             
-            Assert.That(display.ShowScanIsActivated, Is.True);
+        }
+        [Test]
+        public void Display_ShowConnectionIsFailed_ContainsCorrectString()
+        {
+            uut.ShowConnectionIsFailed();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Din telefon er ikke ordentlig tilsluttet. Prøv igen."));
+
+        }
+        [Test]
+        public void Display_ShowCorrectId_ContainsCorrectString()
+        {
+            uut.ShowCorrectId();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Tag din telefon ud af skabet og luk døren"));
+
+        }
+        [Test]
+        public void Display_ShowWrongId_ContainsCorrectString()
+        {
+            uut.ShowWrongId();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Forkert RFID tag"));
+
+        }
+        [Test]
+        public void Display_ShowOccupiedLocker_ContainsCorrectString()
+        {
+            uut.ShowOccupiedLocker();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."));
+
         }
 
     }
