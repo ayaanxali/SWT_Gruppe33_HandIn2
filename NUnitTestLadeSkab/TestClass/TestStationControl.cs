@@ -11,11 +11,9 @@ namespace NUnitTestLadeSkab
 {
     public class TestStationControl
     {
-       private FakeDoor fakeDoor;
-       private FakeChargeControl fakeChargeControl;
-       // private FakeUsbCharger fakeUsb;
+        private FakeDoor fakeDoor;
+        private FakeChargeControl fakeChargeControl;
 
-       
         public IDoor Door;
         public IRfidReader rfidReader;
         public IDisplay display;
@@ -24,7 +22,6 @@ namespace NUnitTestLadeSkab
         public ILogFile logFile;
         public StationControl uut;
         public StationControl uut2;
-
 
         [SetUp]
         public void Setup()
@@ -35,10 +32,10 @@ namespace NUnitTestLadeSkab
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
             ChargeControl = NSubstitute.Substitute.For<IChargeControl>();
             logFile = NSubstitute.Substitute.For<ILogFile>();
+           
             fakeDoor = new FakeDoor();
             fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
             uut = new StationControl(rfidReader, Door,fakeChargeControl,display, logFile);
-           
         }
 
         [Test]
@@ -97,7 +94,6 @@ namespace NUnitTestLadeSkab
         {
             int id = 1200;
             uut._state = StationControl.LadeskabState.Available;
-            //UsbChargerSimo.Connected = true;
             fakeChargeControl.ConnectedStatus = true;
 
             uut.RfidDetected(id);
@@ -178,7 +174,6 @@ namespace NUnitTestLadeSkab
             Assert.That(uut._state, Is.EqualTo(uut._state = StationControl.LadeskabState.Available));
         }
 
-        // Test om display-besked kommer, når døren lukkes
         [Test]
         public void SwitchCaseDoorOpen_MethodDoorOpenDisplayMessage_ShowConnectPhoneRecievedIs1()
         {

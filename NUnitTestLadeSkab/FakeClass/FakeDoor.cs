@@ -16,13 +16,11 @@ namespace NUnitTestLadeSkab
 
         public void LockDoor()
         {
-            //Console.WriteLine("Døren er låst");
             LockDoorIsActivated = true;
         }
 
         public void UnlockDoor()
         {
-            //Console.WriteLine("Døren er åben");
             UnLockDoorIsActivated = true;
         }
 

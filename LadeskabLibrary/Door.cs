@@ -15,16 +15,12 @@ namespace LadeskabLibrary
         public void LockDoor()
         {
             Console.WriteLine("Døren er låst");
-            //DoorStatusChanged(new ChangeDoorStatusEvent{Status = false});
-            //LockDoorIsActivated = true;
 
         }
 
         public void UnlockDoor()
         {
             Console.WriteLine("Døren er åben");
-            //DoorStatusChanged(new ChangeDoorStatusEvent { Status = true});
-            //UnLockDoorIsActivated = true;
         }
 
 

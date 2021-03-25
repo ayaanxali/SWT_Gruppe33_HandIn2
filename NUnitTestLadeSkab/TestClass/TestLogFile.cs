@@ -33,8 +33,9 @@ namespace NUnitTestLadeSkab
         public void LogFile_RfidtagIsDetected_FileisUnlogged()
         {
             int id = 1200;
-            uut.LockDoorLog(id);
+
             uut.UnLockDoorLog(id);
+
             Assert.That(File.Exists(logFileName));
         }
 

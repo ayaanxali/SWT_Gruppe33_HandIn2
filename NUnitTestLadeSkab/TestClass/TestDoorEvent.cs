@@ -28,68 +28,71 @@ namespace NUnitTestLadeSkab
         [SetUp]
         public void Setup()
         {
-            stringWriter = new StringWriter();
-            System.Console.SetOut(stringWriter);
-
             rfidReader = NSubstitute.Substitute.For<IRfidReader>();
             display = NSubstitute.Substitute.For<IDisplay>();
             usbCharger = NSubstitute.Substitute.For<IUsbCharger>();
-            fakeChargeControl = new FakeChargeControl(usbCharger);
             door = NSubstitute.Substitute.For<IDoor>();
             logFile = NSubstitute.Substitute.For<ILogFile>();
-            fakeDoor = new FakeDoor();
-
-            stationControl = new StationControl(rfidReader,door,fakeChargeControl,display,logFile);
             
-
+            fakeDoor = new FakeDoor();
+            fakeChargeControl = new FakeChargeControl(usbCharger);
+            stationControl = new StationControl(rfidReader,door,fakeChargeControl,display,logFile);
+            stringWriter = new StringWriter();
             uut = new Door();
+            
+            System.Console.SetOut(stringWriter);
             uut.DoorChangedEvent += (e, args) => { _recievedDoorStatusEvent = args; };
-
         }
 
         [TestCase(true)]
         public void SetDoorStatus_NewDoorStatusOpenToClosed_EventFired(bool var1)
         {
             uut.oldStatus = var1;
+
             uut.SetDoorStatus(false); // door is closed
+
             Assert.That(_recievedDoorStatusEvent.Status, Is.False);
         }
         [TestCase(false)]
         public void SetDoorStatus_NewDoorStatusClosedToOpen_EventFired(bool var1)
         {
             uut.oldStatus = var1;
+
             uut.SetDoorStatus(true); // door is open
+
             Assert.That(_recievedDoorStatusEvent.Status, Is.True);
             
         }
 
-        //[Test]
-        //public void SetDoorStatus_NewDoorStatusEqualToOldStatus_EventNotFired()
-        //{
-        //    uut.oldStatus = true;
-        //    uut.SetDoorStatus(true); // door is open
-        //    Assert.That(_recievedDoorStatusEvent, Is.Null);
-        //}
+        [Test]
+        public void SetDoorStatus_NewDoorStatusEqualToOldStatus_EventNotFired()
+        {
+            uut.oldStatus = true;
+
+            uut.SetDoorStatus(true); // door is open
+
+            Assert.That(_recievedDoorStatusEvent, Is.Null);
+        }
 
         [Test]
         public void SetDoorStatus_NewDoorStatus_CorrectNewDoorStatusRecieved()
         {
             uut.oldStatus = true;
+
             uut.SetDoorStatus(false);
+
             Assert.That(_recievedDoorStatusEvent.Status, Is.EqualTo(false));
         }
 
         [Test]
         public void Door_UnlockDoorMethodIsActivated_DoorIsUnlocked()
         {
-            //act
             stationControl._state = StationControl.LadeskabState.Locked;
             fakeChargeControl.StopChargeIsActivated = true;
             uut.SetDoorStatus(true);
 
             uut.UnlockDoor();
 
-            //assert
             Assert.That(uut.oldStatus, Is.True);
             
         }
@@ -97,37 +100,35 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Door_LockDoorMethodIsActivated_DoorIsLocked()
         {
-            //act
             stationControl._state = StationControl.LadeskabState.Available;
             fakeChargeControl.StartChargeIsActivated = true;
             uut.SetDoorStatus(true);
+
             uut.LockDoor();
 
-            //assert
             Assert.That(uut.oldStatus, Is.True);
-
         }
 
         [Test]
         public void SetDoorStatus_DoorIsUnlocked_LockDoorIsActivated()
         {
-            //act
+            
             uut.SetDoorStatus(false);
+            
             uut.LockDoor();
             stringWriter.ToString();
+            
             //assert
-            // Assert.That(uut.LockDoorIsActivated, Is.EqualTo(true));
             Assert.That(stringWriter.ToString(), Does.Contain("Døren er låst"));
         }
         [Test]
         public void SetDoorStatus_DoorIsLocked_UnlockDoorIsActivated()
         {
-            //act
             uut.SetDoorStatus(false);
+
             uut.UnlockDoor();
             stringWriter.ToString();
             //assert
-            // Assert.That(uut.UnLockDoorIsActivated, Is.EqualTo(true));
             Assert.That(stringWriter.ToString(), Does.Contain("Døren er åben"));
 
         }
@@ -153,6 +154,7 @@ namespace NUnitTestLadeSkab
         {
             stationControl.RfidDetected(id: 1200);
             stationControl._state = StationControl.LadeskabState.Locked;
+
             fakeChargeControl.StopCharge();
             uut.SetDoorStatus(false);
             

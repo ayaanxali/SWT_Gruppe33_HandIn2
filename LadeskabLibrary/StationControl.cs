@@ -18,7 +18,6 @@ namespace LadeskabLibrary
             DoorClosed
         };
 
-        // Her mangler flere member variable
         public LadeskabState _state;
         private IChargeControl _charger;
         public int _oldId;
@@ -27,20 +26,6 @@ namespace LadeskabLibrary
         private IRfidReader _rfidReader;
         private ILogFile _logFile;
         private bool doorStatus { get; set; }
-       // public bool charging = false;
-
-        //private string logFile = "logfile.txt"; // Navnet på systemets log-fil
-
-        // Her mangler constructor
-        //public StationControl(IRfidReader RfidReader, IDoor door)
-        //{
-        //    _door = door;
-        //    _rfidReader = RfidReader;
-
-        //    //this method:HandleRfidDetectedEvent & m.m will be called when new data are ready
-        //    _rfidReader.RfidReaderEvent += HandleRfidDetectedEvent;
-        //    _door.DoorChangedEvent += HandleDoorStatusEvent;
-        //}
 
 
         public StationControl(IRfidReader RfidReader, IDoor door, IChargeControl charger, IDisplay display, ILogFile logFile)
@@ -65,7 +50,6 @@ namespace LadeskabLibrary
             RfidDetected(e.Id);
         }
 
-        // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
         public void RfidDetected(int id)
         {
             switch (_state)
@@ -83,14 +67,12 @@ namespace LadeskabLibrary
                         _logFile.LockDoorLog(id);
 
                         _display.ShowOccupiedLocker();
-                        //Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
                         _state = LadeskabState.Locked;
 
                     }
                     else
                     {
                         _display.ShowConnectionIsFailed();
-                        //Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
                     }
 
                     break;
@@ -147,7 +129,6 @@ namespace LadeskabLibrary
             else
                 _state = LadeskabState.DoorClosed;
         }
-        //Her mangler de andre trigger handlere
         private void HandleDoorStatusEvent(object sender, ChangeDoorStatusEvent e)
         {
             doorStatus = e.Status;

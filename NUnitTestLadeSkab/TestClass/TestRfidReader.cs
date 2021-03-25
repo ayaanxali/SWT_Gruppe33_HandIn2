@@ -15,7 +15,6 @@ namespace NUnitTestLadeSkab
             _recievedRfidEventArgs = null;
 
             uut = new RfidReader();
-            //uut.SetRfidTag(1200);
 
             uut.RfidReaderEvent += (e, args) => { _recievedRfidEventArgs = args; }; 
         }
@@ -24,6 +23,7 @@ namespace NUnitTestLadeSkab
         public void SetRfidTag_NewRfidDetected_EventFired()
         {
             uut.SetRfidTag(1200); 
+
             Assert.That(_recievedRfidEventArgs,Is.Not.Null);
         }
 
@@ -31,6 +31,7 @@ namespace NUnitTestLadeSkab
         public void SetRfidTag_RfidTagSetToNewValue_CorrectNewRefidTagRecieved()
         {
             uut.SetRfidTag(1200);
+
             Assert.That(_recievedRfidEventArgs.Id,Is.EqualTo(1200));
         }
     }
