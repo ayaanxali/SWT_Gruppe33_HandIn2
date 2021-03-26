@@ -55,22 +55,22 @@ namespace NUnitTestLadeSkab
         //    }
         //    Assert.That(readId,Does.Contain(Time2 +": Skab låst med RFID: " + id));
         //}
-        //[Test]
-        //public void UnLockDoorLog_WriteLogToFile_FileContainsWhatsWritten()
-        //{
-        //    int id = 1200;
-        //    uut.UnLockDoorLog(id);
-        //    string readId;
-        //    DateTime Time = new DateTime(2021, 03, 24, 09, 41, 49);
-        //    // 24 - 03 - 2021 09:41:49
-        //    DateTime Time2 = DateTime.Today;
-        //    using (StreamReader reader = new StreamReader(File.OpenRead(logFileName)))
-        //    {
-        //        //readId = id.ToString();
-        //        readId = reader.ReadLine();
-        //    }
-        //    Assert.That(readId, Does.Contain(Time2 + ": Skab låst med RFID: " + id));
-        //}
+        [Test]
+        public void UnLockDoorLog_WriteLogToFile_FileContainsWhatsWritten()
+        {
+            int id = 1200;
+            uut.UnLockDoorLog(id);
+            string readId;
+            DateTime Time = new DateTime(2021, 03, 24, 09, 41, 49);
+            // 24 - 03 - 2021 09:41:49
+            DateTime Time2 = new DateTime();
+            using (StreamReader reader = new StreamReader(File.OpenRead(logFileName)))
+            {
+                //readId = id.ToString();
+                readId = reader.ReadLine();
+            }
+            Assert.That(readId, Does.Contain(new DateTime() + ": Skab låst med RFID: " + id));
+        }
 
         [Test]
         public void LogFile_RfidtagIsDetected_CanLog()
