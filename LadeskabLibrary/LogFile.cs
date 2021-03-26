@@ -13,7 +13,7 @@ namespace LadeskabLibrary
         {
             var writer = File.AppendText(logFile);
 
-            writer.WriteLine(DateTime.Now + ": Skab låst med RFID: {0}", Id);
+            writer.WriteLine(DateTime.Today + ": Skab låst med RFID: {0}", Id);
 
             writer.Close();
             
@@ -23,7 +23,7 @@ namespace LadeskabLibrary
         {
             var writer = File.AppendText(logFile);
 
-            writer.WriteLine(DateTime.Now + ": Skab låst op med RFID: {0}", Id);
+            writer.WriteLine(DateTime.Today + ": Skab låst op med RFID: {0}", Id);
 
             writer.Close();
         }
