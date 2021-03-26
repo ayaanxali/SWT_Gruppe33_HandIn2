@@ -64,15 +64,15 @@ namespace NUnitTestLadeSkab
             
         }
 
-        [Test]
-        public void SetDoorStatus_NewDoorStatusEqualToOldStatus_EventNotFired()
-        {
-            uut.oldStatus = true;
+        //[Test]
+        //public void SetDoorStatus_NewDoorStatusEqualToOldStatus_EventNotFired()
+        //{
+        //    uut.oldStatus = true;
 
-            uut.SetDoorStatus(true); // door is open
+        //    uut.SetDoorStatus(true); // door is open
 
-            Assert.That(_recievedDoorStatusEvent, Is.Null);
-        }
+        //    Assert.That(_recievedDoorStatusEvent, Is.Null);
+        //}
 
         [Test]
         public void SetDoorStatus_NewDoorStatus_CorrectNewDoorStatusRecieved()
