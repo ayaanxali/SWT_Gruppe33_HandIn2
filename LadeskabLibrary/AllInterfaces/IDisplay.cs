@@ -12,5 +12,8 @@ namespace LadeskabLibrary
         public void ShowCorrectId();
         public void ShowWrongId();
         public void ShowScanRfid();
+        public void ShowPhoneIsCharging();
+        public void ShowChargingIsOverloaded();
+        public void ShowPhoneIsNotCharging();
     }
 }

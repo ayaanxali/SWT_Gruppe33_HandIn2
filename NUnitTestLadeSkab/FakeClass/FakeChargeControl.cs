@@ -6,6 +6,7 @@ namespace NUnitTestLadeSkab
     class FakeChargeControl : IChargeControl
     {
         private IUsbCharger chargerSimulator;
+        private IDisplay display;
 
         private bool _isConnected;
 
@@ -14,13 +15,14 @@ namespace NUnitTestLadeSkab
         public bool StartChargeIsActivated;
         public bool StopChargeIsActivated;
 
-        public FakeChargeControl(IUsbCharger chargerSimulator_)
+        public FakeChargeControl(IUsbCharger chargerSimulator_, IDisplay display_)
         {
             chargerSimulator = chargerSimulator_;
+            display = display_;
         }
         public bool IsConnected()
         {
-            _isConnected = ConnectedStatus;
+            ConnectedStatus = _isConnected;
 
             return _isConnected;
 
@@ -30,6 +32,7 @@ namespace NUnitTestLadeSkab
         {
             chargerSimulator.StartCharge();
             StartChargeIsActivated = true; 
+            display.ShowPhoneIsCharging();
         }
 
         public void StopCharge()

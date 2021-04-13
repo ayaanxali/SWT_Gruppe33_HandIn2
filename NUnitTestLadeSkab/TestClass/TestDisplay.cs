@@ -65,7 +65,7 @@ namespace NUnitTestLadeSkab
 
         }
         [Test]
-        public void Display_ShowOccupiedLocker_ContainsCorrectString()
+        public void Display_ShowPhoneIsCharging_ContainsCorrectString()
         {
             uut.ShowOccupiedLocker();
             stringWriter.ToString();

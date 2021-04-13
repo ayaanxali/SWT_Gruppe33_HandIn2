@@ -19,7 +19,7 @@ namespace LadeSkab
             Display display = new Display();
             var usbCharger = new UsbChargerSimulator();
             RfidReader rfidReader = new RfidReader();
-            ChargeControl chargeControl = new ChargeControl(usbCharger);
+            ChargeControl chargeControl = new ChargeControl(usbCharger,display);
             LogFile logFile = new LogFile();
             StationControl stationControl = new StationControl(rfidReader,door,chargeControl,display,logFile);
 

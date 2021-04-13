@@ -18,13 +18,15 @@ namespace LadeskabLibrary
             DoorClosed
         };
 
-        public LadeskabState _state;
-        private IChargeControl _charger;
-        public int _oldId;
+       
         private IDoor _door;
         private IDisplay _display;
         private IRfidReader _rfidReader;
         private ILogFile _logFile;
+        private IChargeControl _charger;
+        private LadeskabState _state;
+        private int _oldId;
+
         private bool doorStatus { get; set; }
 
 
@@ -50,7 +52,7 @@ namespace LadeskabLibrary
             RfidDetected(e.Id);
         }
 
-        public void RfidDetected(int id)
+        private void RfidDetected(int id)
         {
             switch (_state)
             {
@@ -80,6 +82,7 @@ namespace LadeskabLibrary
                 case LadeskabState.DoorOpen:
                     // Ignore
                     DoorOpened();
+                    _state = LadeskabState.Available;
 
                     break;
 
@@ -105,7 +108,8 @@ namespace LadeskabLibrary
                     break;
                 case LadeskabState.DoorClosed:
                     DoorClosed();
-
+                   // _state = LadeskabState.Available;
+                    
                     break;
             }
         }

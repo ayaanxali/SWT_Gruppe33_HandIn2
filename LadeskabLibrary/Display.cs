@@ -21,7 +21,7 @@ namespace LadeskabLibrary
 
         public void ShowOccupiedLocker()
         {
-            Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
+            Console.WriteLine("Skabet er låst. Brug dit RFID tag til at låse op.");
         }
 
         public void ShowCorrectId()
@@ -39,5 +39,19 @@ namespace LadeskabLibrary
             Console.WriteLine("Indlæs Rfidtag");
         }
 
+        public void ShowChargingIsOverloaded()
+        {
+            Console.WriteLine("Der er sket en mulig kortslutning, ladning skal stoppes.");
+        }
+
+        public void ShowPhoneIsCharging()
+        {
+            Console.WriteLine("Telefonen oplades nu");
+        }
+
+        public void ShowPhoneIsNotCharging()
+        {
+            Console.WriteLine("Der lades ikke. Tjek om opladeren er rigtig forbundet til telefonen.");
+        }
     }
 }

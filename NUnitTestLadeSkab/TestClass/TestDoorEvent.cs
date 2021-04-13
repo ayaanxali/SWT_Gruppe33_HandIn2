@@ -15,6 +15,7 @@ namespace NUnitTestLadeSkab
         private StationControl stationControl;
         private FakeChargeControl fakeChargeControl;
         private FakeDoor fakeDoor;
+        private FakeDisplay fakeDisplay;
         private StringWriter stringWriter;
 
 
@@ -35,7 +36,7 @@ namespace NUnitTestLadeSkab
             logFile = NSubstitute.Substitute.For<ILogFile>();
             
             fakeDoor = new FakeDoor();
-            fakeChargeControl = new FakeChargeControl(usbCharger);
+            fakeChargeControl = new FakeChargeControl(usbCharger,fakeDisplay);
             stationControl = new StationControl(rfidReader,door,fakeChargeControl,display,logFile);
             stringWriter = new StringWriter();
             uut = new Door();
@@ -87,7 +88,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Door_UnlockDoorMethodIsActivated_DoorIsUnlocked()
         {
-            stationControl._state = StationControl.LadeskabState.Locked;
+           // stationControl._state = StationControl.LadeskabState.Locked;
             fakeChargeControl.StopChargeIsActivated = true;
             uut.SetDoorStatus(true);
 
@@ -100,7 +101,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Door_LockDoorMethodIsActivated_DoorIsLocked()
         {
-            stationControl._state = StationControl.LadeskabState.Available;
+           // stationControl._state = StationControl.LadeskabState.Available;
             fakeChargeControl.StartChargeIsActivated = true;
             uut.SetDoorStatus(true);
 
@@ -137,8 +138,9 @@ namespace NUnitTestLadeSkab
         public void Door_DoorIsLocked_LockDoorIsActivatedIsTrue()
         {
             //act
-            stationControl.RfidDetected(id:1200);
-            stationControl._state = StationControl.LadeskabState.Available;
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+
+            //stationControl._state = StationControl.LadeskabState.Available;
             
             fakeChargeControl.StartCharge();
             uut.SetDoorStatus(false);
@@ -152,8 +154,9 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Door_DoorIsUnlocked_UnlockDoorIsActivated()
         {
-            stationControl.RfidDetected(id: 1200);
-            stationControl._state = StationControl.LadeskabState.Locked;
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+
+           // stationControl._state = StationControl.LadeskabState.Locked;
 
             fakeChargeControl.StopCharge();
             uut.SetDoorStatus(false);

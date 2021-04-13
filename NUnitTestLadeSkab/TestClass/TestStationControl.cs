@@ -5,6 +5,7 @@ using LadeSkab;
 using LadeskabLibrary;
 using LadeskabLibrary.AllInterfaces;
 using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using NuGet.Frameworks;
 
 namespace NUnitTestLadeSkab
@@ -13,11 +14,12 @@ namespace NUnitTestLadeSkab
     {
         private FakeDoor fakeDoor;
         private FakeChargeControl fakeChargeControl;
+        private FakeUsbCharger fakeUsbCharger;
 
         public IDoor Door;
         public IRfidReader rfidReader;
         public IDisplay display;
-        public IChargeControl ChargeControl;
+        public IChargeControl chargeControl;
         public IUsbCharger UsbChargerSimo;
         public ILogFile logFile;
         public StationControl uut;
@@ -30,47 +32,44 @@ namespace NUnitTestLadeSkab
             rfidReader = NSubstitute.Substitute.For<IRfidReader>();
             display = NSubstitute.Substitute.For<IDisplay>();
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
-            ChargeControl = NSubstitute.Substitute.For<IChargeControl>();
+            chargeControl = NSubstitute.Substitute.For<IChargeControl>();
             logFile = NSubstitute.Substitute.For<ILogFile>();
+            fakeUsbCharger = new FakeUsbCharger();
            
-            fakeDoor = new FakeDoor();
-            fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
-            uut = new StationControl(rfidReader, Door,fakeChargeControl,display, logFile);
+            //fakeDoor = new FakeDoor();
+            //fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
+            uut = new StationControl(rfidReader, Door,chargeControl,display, logFile);
         }
 
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodDoorIsLockedRecieved1()
         {
-            int id = 1200;
-            uut._state = StationControl.LadeskabState.Available;
-            fakeChargeControl.ConnectedStatus = true;
+           chargeControl.IsConnected().Returns(true);
 
-            uut.RfidDetected(id);
+           rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
+            //assert
             Door.Received(1).LockDoor();
         }
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodStartChargeRecieved1()
         {
-            int id = 1200;
-            uut._state = StationControl.LadeskabState.Available;
-            fakeChargeControl.ConnectedStatus = true;
+            chargeControl.IsConnected().Returns(true);
 
-            uut.RfidDetected(id);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
-            Assert.That(fakeChargeControl.StartChargeIsActivated, Is.True);
-            
+            chargeControl.Received(1).IsConnected();
+            //Assert.That(fakeChargeControl.StartChargeIsActivated, Is.True);
+
         }
         [Test]
-        public void SwitchCaseAvailable_ChargerIsConnected_MethodShowOccupiedLockerRecievedOne()
+        public void SwitchCaseAvailable_ChargerIsConnected_MethodShowPhoneIsChargingRecievedOne()
         {
             //arrange
-            int newId = 1200;
-            uut._state = StationControl.LadeskabState.Available;
-            fakeChargeControl.ConnectedStatus = true;
+            chargeControl.IsConnected().Returns(true);
             
             //act
-            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = newId });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs {Id = 1200});
             
             //assert
             display.Received(1).ShowOccupiedLocker();
@@ -80,161 +79,115 @@ namespace NUnitTestLadeSkab
         [Test]
         public void SwitchCaseAvailable_ChargerIsNotConnected_MethodShowConnectionIsFailedRecievedOne()
         {
-            int id = 1200;
-            uut._state = StationControl.LadeskabState.Available;
-            fakeChargeControl.ConnectedStatus = false;
+            chargeControl.IsConnected().Returns(false);
 
-            uut.RfidDetected(id);
-
-            display.Received(1).ShowConnectionIsFailed();
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            
+            display.Received(1).ShowConnectionIsFailed(); 
         }
 
         [Test]
-        public void SwitchCaseAvailable_ChargerIsConnectedSwitchCaseChanged_SwitchToLocked()
+        public void SwitchCaseLocked_IdIsEqualToOldId_StopChargeReceived1()
         {
-            int id = 1200;
-            uut._state = StationControl.LadeskabState.Available;
-            fakeChargeControl.ConnectedStatus = true;
+            chargeControl.IsConnected().Returns(true);
 
-            uut.RfidDetected(id);
-
-            Assert.That(uut._state,Is.EqualTo(uut._state= StationControl.LadeskabState.Locked));
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+           
+            chargeControl.Received(1).StopCharge();
         }
 
-        [TestCase(1200)]
-        public void SwitchCaseLocked_IdIsEqualToOldId_StopChargeIsActivatedIsTrue(int Id)
+        [Test]
+        public void SwitchCaseLocked_IdIsNotEqualToOldId_StopChargeIsActivatedIsFalse()
         {
             //arrange
-            uut._state = StationControl.LadeskabState.Locked;
-            uut._oldId = Id; 
+            chargeControl.IsConnected().Returns(true);
 
             //act
-            uut.RfidDetected(Id);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1000 });
 
             //assert
-            Assert.That(fakeChargeControl.StopChargeIsActivated, Is.True);
+           // Assert.That(fakeChargeControl.StopChargeIsActivated, Is.False);
+            chargeControl.DidNotReceive().StopCharge();
 
         }
-        [TestCase(1200,1000)]
-        public void SwitchCaseLocked_IdIsNotEqualToOldId_StopChargeIsActivatedIsFalse(int OldId,int NewId)
+        [Test]
+        public void SwitchCaseLocked_IdIsEqualToOldId_MethodDoorUnLockedRecieved1()
         {
-            //arrange
-            uut._state = StationControl.LadeskabState.Locked;
-            uut._oldId = OldId;
+            chargeControl.IsConnected().Returns(true);
 
-            //act
-            uut.RfidDetected(NewId);
-
-            //assert
-            Assert.That(fakeChargeControl.StopChargeIsActivated, Is.False);
-
-        }
-        [TestCase(1200)]
-        public void SwitchCaseLocked_IdIsEqualToOldId_MethodDoorUnLockedRecieved1(int id)
-        {
-            uut._state = StationControl.LadeskabState.Locked;
-            uut._oldId = id;   
-
-            uut.RfidDetected(id);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
             Door.Received(1).UnlockDoor();
         }
         [TestCase(1200)]
         public void SwitchCaseLocked_IdIsEqualToOldId_MethodShowCorrectIdRecievedIs1(int id)
         {
-            uut._state = StationControl.LadeskabState.Locked;
-            uut._oldId = id;
+            chargeControl.IsConnected().Returns(true);
 
-            uut.RfidDetected(id);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
             display.Received(1).ShowCorrectId();
         }
-        [TestCase(1200, 1000)]
-        public void SwitchCaseLocked_IdIsNotEqualToOldId_MethodShowWrongIdRecievedIs1(int OldId, int NewId)
+        [Test]
+        public void SwitchCaseLocked_IdIsNotEqualToOldId_MethodShowWrongIdRecievedIs1()
         {
-            //arrange
-            uut._state = StationControl.LadeskabState.Locked;
-            uut._oldId = OldId;
+            chargeControl.IsConnected().Returns(true);
 
-            //act
-            uut.RfidDetected(NewId);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1000 });
 
             //assert
-           display.Received(1).ShowWrongId();
+            display.Received(1).ShowWrongId();
 
         }
-        [TestCase(1200)]
-        public void SwitchCaseLocked_SwitchCaseChangedWhenIdIsEqualToOldId_SwitchToAvailable(int Id)
+        [TestCase()]
+        public void SwitchCaseLocked_SwitchCaseChangedWhenIdIsEqualToOldId_SwitchToAvailable()
         {
-            uut._state = StationControl.LadeskabState.Locked;
-            uut._oldId = Id;
-            
-            uut.RfidDetected(Id);
+            chargeControl.IsConnected().Returns(true);
 
-            Assert.That(uut._state, Is.EqualTo(uut._state = StationControl.LadeskabState.Available));
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+
+            chargeControl.IsConnected().Returns(false);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1300 });
+           
+
+           display.Received(1).ShowConnectionIsFailed();
         }
 
         [Test]
-        public void SwitchCaseDoorOpen_MethodDoorOpenDisplayMessage_ShowConnectPhoneRecievedIs1()
+        public void SwitchCaseDoorOpen_MethodDoorOpenShowDisplayMessage_ShowConnectPhoneReceived1()
         {
-            int id = 1200;
-            //arrange
-            uut._state = StationControl.LadeskabState.DoorOpen;
-
-            //act
-            uut.RfidDetected(id);
+            Door.DoorChangedEvent += Raise.EventWith(new ChangeDoorStatusEvent {Status = true});
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
             //assert
             display.Received(1).ShowConnectPhone();
         }
-        [Test]
-        public void SwitchCaseDoorOpen_MethodDoorClosedDisplayMessage_ShowRfidRecievedIs1()
-        {
-            int id = 1200;
-            //arrange
-            uut._state = StationControl.LadeskabState.DoorClosed;
 
-            //act
-            uut.RfidDetected(id);
-
-            //assert
-            display.Received(1).ShowScanRfid();
-        }
-
-        [Test]
-        public void DoorEvent_SetDoorStatusIsTrue_SwitchCaseIsDoorOpen()
-        {
-            uut2 = new StationControl(rfidReader,fakeDoor,ChargeControl,display,logFile);
-            fakeDoor.oldStatus = false;
-
-            fakeDoor.SetDoorStatus(true);
-           // Door.SetDoorStatus(true);
-            Assert.That(uut2._state, Is.EqualTo(uut2._state= StationControl.LadeskabState.DoorOpen));
-
-        }
+       
         [Test]
         public void DoorEvent_SetDoorStatusIsFalse_SwitchCaseIsDoorClosed()
         {
-            uut2 = new StationControl(rfidReader, fakeDoor, ChargeControl, display,logFile);
-            fakeDoor.oldStatus = true;
+            Door.DoorChangedEvent += Raise.EventWith(new ChangeDoorStatusEvent { Status = false });
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
-            fakeDoor.SetDoorStatus(false);
-            // Door.SetDoorStatus(true);
-            Assert.That(uut2._state, Is.EqualTo(uut2._state = StationControl.LadeskabState.DoorClosed));
+            display.Received(1).ShowScanRfid();
 
         }
 
-        [Test]
-        public void SwicthCaseIsAvailable_LockDoorLogMethod_ReceivedIs1()
+        [TestCase(1200,1200)]
+        public void SwicthCaseIsAvailable_LockDoorLogMethod_ReceivedIs1(int logId, int rfidTag)
         {
-            int id = 1200;
-            uut._state = StationControl.LadeskabState.Available;
-            //UsbChargerSimo.Connected = true;
-            fakeChargeControl.ConnectedStatus = true;
+            chargeControl.IsConnected().Returns(true);
 
-            uut.RfidDetected(id);
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = rfidTag });
 
-            logFile.Received(1).LockDoorLog(id);
+            logFile.Received(1).LockDoorLog(logId);
         }
     }
 }

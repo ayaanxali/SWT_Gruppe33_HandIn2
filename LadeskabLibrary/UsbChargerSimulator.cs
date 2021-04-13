@@ -18,7 +18,7 @@ namespace LadeskabLibrary
     public event EventHandler<CurrentEventArgs> CurrentValueEvent;
     //public event EventHandler<ChargingEventArg> ChargingEvent;
 
-        public double CurrentValue { get; private set; }
+    public double CurrentValue { get; private set; }
 
     public bool Connected { get;  set; }
 
@@ -83,15 +83,15 @@ namespace LadeskabLibrary
             {
                 if (Connected && !_overload)
                 {
-                    CurrentValue = 500;
+                    CurrentValue = 500; // opladning foregår normalt - display skal vise at opladning foregår
                 }
                 else if (Connected && _overload)
                 {
-                    CurrentValue = OverloadCurrent;
+                    CurrentValue = OverloadCurrent; // der er sket en mulig kortslutning, ladning skal stoppes.- display fejlmeddelse
                 }
                 else if (!Connected)
                 {
-                    CurrentValue = 0.0;
+                    CurrentValue = 0.0; //der er ikke forbindelse til telefon eller ladning ikke påbegyndt. - display viser ikke nogen ladning
                 }
 
                 OnNewCurrent();
