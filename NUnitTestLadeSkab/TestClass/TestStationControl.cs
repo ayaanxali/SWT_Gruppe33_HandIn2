@@ -12,9 +12,9 @@ namespace NUnitTestLadeSkab
 {
     public class TestStationControl
     {
-        private FakeDoor fakeDoor;
-        private FakeChargeControl fakeChargeControl;
-        private FakeUsbCharger fakeUsbCharger;
+        //private FakeDoor fakeDoor;
+        //private FakeChargeControl fakeChargeControl;
+       // private FakeUsbCharger fakeUsbCharger;
 
         public IDoor Door;
         public IRfidReader rfidReader;
@@ -23,7 +23,7 @@ namespace NUnitTestLadeSkab
         public IUsbCharger UsbChargerSimo;
         public ILogFile logFile;
         public StationControl uut;
-        public StationControl uut2;
+        
 
         [SetUp]
         public void Setup()
@@ -34,7 +34,7 @@ namespace NUnitTestLadeSkab
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
             chargeControl = NSubstitute.Substitute.For<IChargeControl>();
             logFile = NSubstitute.Substitute.For<ILogFile>();
-            fakeUsbCharger = new FakeUsbCharger();
+            //fakeUsbCharger = new FakeUsbCharger();
            
             //fakeDoor = new FakeDoor();
             //fakeChargeControl = new FakeChargeControl(UsbChargerSimo);

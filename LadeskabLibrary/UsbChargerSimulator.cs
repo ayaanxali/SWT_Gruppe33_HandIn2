@@ -113,7 +113,7 @@ namespace LadeskabLibrary
         _charging = false;
     }
 
-    private void OnNewCurrent()
+        protected virtual void OnNewCurrent()
     {
         CurrentValueEvent?.Invoke(this, new CurrentEventArgs() {Current = this.CurrentValue});
     }

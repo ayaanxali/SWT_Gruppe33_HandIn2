@@ -6,11 +6,11 @@ namespace NUnitTestLadeSkab
     public class FakeUsbCharger : IUsbCharger
     {
         // Constants
-        private const double MaxCurrent = 500.0; // mA
-        private const double FullyChargedCurrent = 2.5; // mA
+       // private const double MaxCurrent = 500.0; // mA
+      //  private const double FullyChargedCurrent = 2.5; // mA
         private const double OverloadCurrent = 750; // mA
-        private const int ChargeTimeMinutes = 20; // minutes
-        private const int CurrentTickInterval = 250; // ms
+       // private const int ChargeTimeMinutes = 20; // minutes
+       // private const int CurrentTickInterval = 250; // ms
 
         public event EventHandler<CurrentEventArgs> CurrentValueEvent;
         public double CurrentValue { get; set; }
@@ -24,10 +24,6 @@ namespace NUnitTestLadeSkab
             Connected = true;
             _overload = false;
 
-            //_timer = new System.Timers.Timer();
-            //_timer.Enabled = false;
-           // _timer.Interval = CurrentTickInterval;
-            //_timer.Elapsed += TimerOnElapsed;
         }
         public void SimulateConnected(bool connected)
         {
@@ -70,7 +66,7 @@ namespace NUnitTestLadeSkab
             _charging = false;
             
         }
-        private void OnNewCurrent()
+        protected virtual void OnNewCurrent()
         {
             CurrentValueEvent?.Invoke(this, new CurrentEventArgs() { Current = this.CurrentValue });
         }
