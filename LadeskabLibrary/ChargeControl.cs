@@ -40,16 +40,16 @@ namespace LadeskabLibrary
 
         public void Fuse()
         {
-            if (CurrentNow > 500)
+            if (CurrentNow >= 501 && CurrentNow <= 750)
             {
-                StopCharge();
+                //StopCharge();
                 display.ShowStatusChargingIsOverloaded();
             }
-            else if (CurrentNow <= 500 && CurrentNow>5)
+            else if (CurrentNow <= 500 && CurrentNow > 5)
             {
                 display.ShowStatusPhoneIsCharging();
             }
-            else if(0<CurrentNow && CurrentNow<=5)
+            else if(0 <= CurrentNow && CurrentNow <= 5)
             {
                 display.ShowStatusPhoneIsFullyCharged();
             }

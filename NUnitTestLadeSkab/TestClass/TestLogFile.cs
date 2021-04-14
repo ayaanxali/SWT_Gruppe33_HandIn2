@@ -23,19 +23,26 @@ namespace NUnitTestLadeSkab
         [Test]
         public void LogFile_RfidtagIsDetected_FileisLogged()
         {
+            //arrange
             int id = 1200;
+
+            //act
             uut.LockDoorLog(id);
 
+            //assert
             Assert.That(File.Exists(logFileName));
         }
 
         [Test]
         public void LogFile_RfidtagIsDetected_FileisUnlogged()
         {
+            //arrange
             int id = 1200;
 
+            //act
             uut.UnLockDoorLog(id);
 
+            //assert
             Assert.That(File.Exists(logFileName));
         }
 

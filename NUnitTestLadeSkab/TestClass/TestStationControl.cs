@@ -12,10 +12,6 @@ namespace NUnitTestLadeSkab
 {
     public class TestStationControl
     {
-        //private FakeDoor fakeDoor;
-        //private FakeChargeControl fakeChargeControl;
-       // private FakeUsbCharger fakeUsbCharger;
-
         public IDoor Door;
         public IRfidReader rfidReader;
         public IDisplay display;
@@ -34,19 +30,18 @@ namespace NUnitTestLadeSkab
             UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
             chargeControl = NSubstitute.Substitute.For<IChargeControl>();
             logFile = NSubstitute.Substitute.For<ILogFile>();
-            //fakeUsbCharger = new FakeUsbCharger();
-           
-            //fakeDoor = new FakeDoor();
-            //fakeChargeControl = new FakeChargeControl(UsbChargerSimo);
+            
             uut = new StationControl(rfidReader, Door,chargeControl,display, logFile);
         }
 
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodDoorIsLockedRecieved1()
         {
-           chargeControl.IsConnected().Returns(true);
+            //arrange
+            chargeControl.IsConnected().Returns(true);
 
-           rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
+            //act
+            rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
             //assert
             Door.Received(1).LockDoor();
@@ -54,13 +49,14 @@ namespace NUnitTestLadeSkab
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodStartChargeRecieved1()
         {
+            //arrange
             chargeControl.IsConnected().Returns(true);
 
+            //act
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
+            //assert
             chargeControl.Received(1).IsConnected();
-            //Assert.That(fakeChargeControl.StartChargeIsActivated, Is.True);
-
         }
         [Test]
         public void SwitchCaseAvailable_ChargerIsConnected_MethodShowPhoneIsChargingRecievedOne()
@@ -73,27 +69,31 @@ namespace NUnitTestLadeSkab
             
             //assert
             display.Received(1).ShowMessageOccupiedLocker();
-            
-
         }
         [Test]
         public void SwitchCaseAvailable_ChargerIsNotConnected_MethodShowConnectionIsFailedRecievedOne()
         {
+            //arrange
             chargeControl.IsConnected().Returns(false);
 
+            //act
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
-            
+
+            //assert
             display.Received(1).ShowMessageConnectionIsFailed(); 
         }
 
         [Test]
         public void SwitchCaseLocked_IdIsEqualToOldId_StopChargeReceived1()
         {
+            //arrange
             chargeControl.IsConnected().Returns(true);
 
+            //act
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
-           
+
+            //assert
             chargeControl.Received(1).StopCharge();
         }
 
@@ -108,18 +108,19 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1000 });
 
             //assert
-           // Assert.That(fakeChargeControl.StopChargeIsActivated, Is.False);
             chargeControl.DidNotReceive().StopCharge();
-
         }
         [Test]
         public void SwitchCaseLocked_IdIsEqualToOldId_MethodDoorUnLockedRecieved1()
         {
+            //arrange
             chargeControl.IsConnected().Returns(true);
 
+            //act
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
+            //assert
             Door.Received(1).UnlockDoor();
         }
         [TestCase(1200)]
@@ -130,6 +131,7 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
+            //assert
             display.Received(1).ShowMessageCorrectId();
         }
         [Test]
@@ -142,9 +144,8 @@ namespace NUnitTestLadeSkab
 
             //assert
             display.Received(1).ShowMessageWrongId();
-
         }
-        [TestCase()]
+        [Test]
         public void SwitchCaseLocked_SwitchCaseChangedWhenIdIsEqualToOldId_SwitchToAvailable()
         {
             chargeControl.IsConnected().Returns(true);
@@ -154,9 +155,9 @@ namespace NUnitTestLadeSkab
 
             chargeControl.IsConnected().Returns(false);
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1300 });
-           
 
-           display.Received(1).ShowMessageConnectionIsFailed();
+            //assert
+            display.Received(1).ShowMessageConnectionIsFailed();
         }
 
         [Test]
@@ -176,8 +177,8 @@ namespace NUnitTestLadeSkab
             Door.DoorChangedEvent += Raise.EventWith(new ChangeDoorStatusEvent { Status = false });
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
+            //assert
             display.Received(1).ShowMessageScanRfid();
-
         }
 
         [TestCase(1200,1200)]
@@ -187,6 +188,7 @@ namespace NUnitTestLadeSkab
 
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = rfidTag });
 
+            //assert
             logFile.Received(1).LockDoorLog(logId);
         }
     }

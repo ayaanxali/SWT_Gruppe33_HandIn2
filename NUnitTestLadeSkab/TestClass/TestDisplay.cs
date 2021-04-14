@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace NUnitTestLadeSkab
 {
-    class TestDisplay
+    public class TestDisplay
     {
         private Display uut;
         private StringWriter stringWriter;
@@ -52,7 +52,7 @@ namespace NUnitTestLadeSkab
             uut.ShowMessageCorrectId();
             stringWriter.ToString();
 
-            Assert.That(stringWriter.ToString(), Does.Contain("Tag din telefon ud af skabet og luk døren"));
+            Assert.That(stringWriter.ToString(), Does.Contain("Korrekt ID. Du kan tage din telefon ud af skabet og lukke døren"));
 
         }
         [Test]
@@ -70,7 +70,34 @@ namespace NUnitTestLadeSkab
             uut.ShowMessageOccupiedLocker();
             stringWriter.ToString();
 
-            Assert.That(stringWriter.ToString(), Does.Contain("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."));
+            Assert.That(stringWriter.ToString(), Does.Contain("Skabet er låst. Brug dit RFID tag til at låse op."));
+
+        }
+        [Test]
+        public void Display_ShowStatusChargingIsOverloaded_ContainsCorrectString()
+        {
+            uut.ShowStatusChargingIsOverloaded();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Fejl under opladning. Ladning af telefon er stoppet. Kontakt servicepersonale"));
+
+        }
+        [Test]
+        public void Display_ShowStatusPhoneIsCharging_ContainsCorrectString()
+        {
+            uut.ShowStatusPhoneIsCharging();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Telefonen oplades"));
+
+        }
+        [Test]
+        public void Display_ShowStatusPhoneIsFullyCharged_ContainsCorrectString()
+        {
+            uut.ShowStatusPhoneIsFullyCharged();
+            stringWriter.ToString();
+
+            Assert.That(stringWriter.ToString(), Does.Contain("Telefon er fyldt opladet."));
 
         }
 

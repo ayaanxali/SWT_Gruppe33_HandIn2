@@ -10,7 +10,7 @@ namespace NUnitTestLadeSkab
 
         private bool _isConnected;
 
-        public bool ConnectedStatus { get; set; } 
+        //public bool ConnectedStatus { get; set; } 
         //public event EventHandler<ChargingEventArg> ChargingEvent;
         public bool StartChargeIsActivated;
         public bool StopChargeIsActivated;
@@ -22,7 +22,7 @@ namespace NUnitTestLadeSkab
         }
         public bool IsConnected()
         {
-            ConnectedStatus = _isConnected;
+            //ConnectedStatus = _isConnected;
 
             return _isConnected;
 
@@ -31,8 +31,7 @@ namespace NUnitTestLadeSkab
         public void StartCharge()
         {
             chargerSimulator.StartCharge();
-            StartChargeIsActivated = true; 
-            display.ShowStatusPhoneIsCharging();
+            StartChargeIsActivated = true;
         }
 
         public void StopCharge()
@@ -43,7 +42,7 @@ namespace NUnitTestLadeSkab
 
         //protected virtual void OnCharging(ChargingEventArg e)
         //{
-        //    ChargingEvent?.Invoke(this,e);
+        //    ChargingEvent?.Invoke(this, e);
         //}
     }
 }

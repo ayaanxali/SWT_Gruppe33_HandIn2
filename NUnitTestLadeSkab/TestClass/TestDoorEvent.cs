@@ -8,14 +8,12 @@ using NUnit.Framework.Internal.Execution;
 
 namespace NUnitTestLadeSkab
 {
-    class TestDoor
+    public class TestDoor
     {
         private Door uut;
         private ChangeDoorStatusEvent _recievedDoorStatusEvent = null;
         private StationControl stationControl;
         private FakeChargeControl fakeChargeControl;
-        private FakeDoor fakeDoor;
-        private FakeDisplay fakeDisplay;
         private StringWriter stringWriter;
 
 
@@ -34,9 +32,8 @@ namespace NUnitTestLadeSkab
             usbCharger = NSubstitute.Substitute.For<IUsbCharger>();
             door = NSubstitute.Substitute.For<IDoor>();
             logFile = NSubstitute.Substitute.For<ILogFile>();
-            
-            fakeDoor = new FakeDoor();
-            fakeChargeControl = new FakeChargeControl(usbCharger,fakeDisplay);
+
+            fakeChargeControl = new FakeChargeControl(usbCharger,display);
             stationControl = new StationControl(rfidReader,door,fakeChargeControl,display,logFile);
             stringWriter = new StringWriter();
             uut = new Door();
@@ -88,7 +85,6 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Door_UnlockDoorMethodIsActivated_DoorIsUnlocked()
         {
-           // stationControl._state = StationControl.LadeskabState.Locked;
             fakeChargeControl.StopChargeIsActivated = true;
             uut.SetDoorStatus(true);
 
@@ -143,11 +139,13 @@ namespace NUnitTestLadeSkab
             //stationControl._state = StationControl.LadeskabState.Available;
             
             fakeChargeControl.StartCharge();
-            uut.SetDoorStatus(false);
+            uut.SetDoorStatus(true);
             
-            fakeDoor.LockDoor();
+            //fakeDoor.LockDoor();
+            uut.LockDoor();
 
-            Assert.That(fakeDoor.LockDoorIsActivated, Is.True);
+            //Assert.That(fakeDoor.LockDoorIsActivated, Is.True);
+            Assert.That(_recievedDoorStatusEvent.Status,Is.True);
 
         }
 
@@ -159,11 +157,13 @@ namespace NUnitTestLadeSkab
            // stationControl._state = StationControl.LadeskabState.Locked;
 
             fakeChargeControl.StopCharge();
-            uut.SetDoorStatus(false);
+            uut.SetDoorStatus(true);
             
-            fakeDoor.UnlockDoor();
+            //fakeDoor.UnlockDoor();
+            uut.UnlockDoor();
 
-            Assert.That(fakeDoor.UnLockDoorIsActivated, Is.True);
+            //Assert.That(fakeDoor.UnLockDoorIsActivated, Is.True);
+            Assert.That(_recievedDoorStatusEvent.Status,Is.True);
 
 
         }

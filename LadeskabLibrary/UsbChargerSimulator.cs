@@ -104,18 +104,18 @@ namespace LadeskabLibrary
         }
 
         public void StopCharge()
-    {
-        _timer.Stop();
+        {
+            _timer.Stop();
 
-        CurrentValue = 0.0;
-        OnNewCurrent();
+            CurrentValue = 0.0;
+            OnNewCurrent();
 
-        _charging = false;
-    }
+            _charging = false;
+        }
 
         protected virtual void OnNewCurrent()
-    {
-        CurrentValueEvent?.Invoke(this, new CurrentEventArgs() {Current = this.CurrentValue});
-    }
+        {
+            CurrentValueEvent?.Invoke(this, new CurrentEventArgs() {Current = this.CurrentValue});
+        }
     }
 }

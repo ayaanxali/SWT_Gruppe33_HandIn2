@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace NUnitTestLadeSkab
 {
-    class TestRfidReaderEvent
+    public class TestRfidReaderEvent
     {
         private RfidReader uut;
         private RfidDetectedEventArgs _recievedRfidEventArgs;
