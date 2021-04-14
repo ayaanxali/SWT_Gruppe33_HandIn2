@@ -21,7 +21,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Display_ShowConnectPhone_ContainsCorrectString()
         {
-            uut.ShowConnectPhone();
+            uut.ShowMessageConnectPhone();
             stringWriter.ToString();
 
             Assert.That(stringWriter.ToString(), Does.Contain("Tilslut telefon"));
@@ -31,7 +31,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Display_ShowScanRfid_ContainsCorrectString()
         {
-            uut.ShowScanRfid();
+            uut.ShowMessageScanRfid();
             stringWriter.ToString();
 
             Assert.That(stringWriter.ToString(), Does.Contain("Indlæs Rfidtag"));
@@ -40,7 +40,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Display_ShowConnectionIsFailed_ContainsCorrectString()
         {
-            uut.ShowConnectionIsFailed();
+            uut.ShowMessageConnectionIsFailed();
             stringWriter.ToString();
 
             Assert.That(stringWriter.ToString(), Does.Contain("Din telefon er ikke ordentlig tilsluttet. Prøv igen."));
@@ -49,7 +49,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Display_ShowCorrectId_ContainsCorrectString()
         {
-            uut.ShowCorrectId();
+            uut.ShowMessageCorrectId();
             stringWriter.ToString();
 
             Assert.That(stringWriter.ToString(), Does.Contain("Tag din telefon ud af skabet og luk døren"));
@@ -58,7 +58,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Display_ShowWrongId_ContainsCorrectString()
         {
-            uut.ShowWrongId();
+            uut.ShowMessageWrongId();
             stringWriter.ToString();
 
             Assert.That(stringWriter.ToString(), Does.Contain("Forkert RFID tag"));
@@ -67,7 +67,7 @@ namespace NUnitTestLadeSkab
         [Test]
         public void Display_ShowPhoneIsCharging_ContainsCorrectString()
         {
-            uut.ShowOccupiedLocker();
+            uut.ShowMessageOccupiedLocker();
             stringWriter.ToString();
 
             Assert.That(stringWriter.ToString(), Does.Contain("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op."));

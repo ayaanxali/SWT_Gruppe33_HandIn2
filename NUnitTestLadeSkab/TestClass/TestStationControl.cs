@@ -72,7 +72,7 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs {Id = 1200});
             
             //assert
-            display.Received(1).ShowOccupiedLocker();
+            display.Received(1).ShowMessageOccupiedLocker();
             
 
         }
@@ -83,7 +83,7 @@ namespace NUnitTestLadeSkab
 
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
             
-            display.Received(1).ShowConnectionIsFailed(); 
+            display.Received(1).ShowMessageConnectionIsFailed(); 
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
-            display.Received(1).ShowCorrectId();
+            display.Received(1).ShowMessageCorrectId();
         }
         [Test]
         public void SwitchCaseLocked_IdIsNotEqualToOldId_MethodShowWrongIdRecievedIs1()
@@ -141,7 +141,7 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1000 });
 
             //assert
-            display.Received(1).ShowWrongId();
+            display.Received(1).ShowMessageWrongId();
 
         }
         [TestCase()]
@@ -156,7 +156,7 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1300 });
            
 
-           display.Received(1).ShowConnectionIsFailed();
+           display.Received(1).ShowMessageConnectionIsFailed();
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace NUnitTestLadeSkab
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
             //assert
-            display.Received(1).ShowConnectPhone();
+            display.Received(1).ShowMessageConnectPhone();
         }
 
        
@@ -176,7 +176,7 @@ namespace NUnitTestLadeSkab
             Door.DoorChangedEvent += Raise.EventWith(new ChangeDoorStatusEvent { Status = false });
             rfidReader.RfidReaderEvent += Raise.EventWith(new RfidDetectedEventArgs { Id = 1200 });
 
-            display.Received(1).ShowScanRfid();
+            display.Received(1).ShowMessageScanRfid();
 
         }
 

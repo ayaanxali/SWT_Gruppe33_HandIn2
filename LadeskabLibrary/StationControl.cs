@@ -68,13 +68,13 @@ namespace LadeskabLibrary
 
                         _logFile.LockDoorLog(id);
 
-                        _display.ShowOccupiedLocker();
+                        _display.ShowMessageOccupiedLocker();
                         _state = LadeskabState.Locked;
 
                     }
                     else
                     {
-                        _display.ShowConnectionIsFailed();
+                        _display.ShowMessageConnectionIsFailed();
                     }
 
                     break;
@@ -95,13 +95,13 @@ namespace LadeskabLibrary
                         
                         _logFile.UnLockDoorLog(id);
 
-                        _display.ShowCorrectId();
+                        _display.ShowMessageCorrectId();
                         
                         _state = LadeskabState.Available;
                     }
                     else
                     {
-                        _display.ShowWrongId();
+                        _display.ShowMessageWrongId();
                         
                     }
 
@@ -116,12 +116,12 @@ namespace LadeskabLibrary
 
         public void DoorOpened()
         {
-            _display.ShowConnectPhone();
+            _display.ShowMessageConnectPhone();
         }
 
         public void DoorClosed()
         {
-            _display.ShowScanRfid();
+            _display.ShowMessageScanRfid();
         }
 
         private void DoorStatusChanged()

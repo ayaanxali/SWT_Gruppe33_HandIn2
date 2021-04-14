@@ -64,8 +64,7 @@ namespace NUnitTestLadeSkab
 
             uut.StartCharge();
 
-            display.Received(1).ShowPhoneIsCharging();
-            
+            display.Received(1).ShowStatusPhoneIsCharging();
         }
 
         [Test]
@@ -92,7 +91,7 @@ namespace NUnitTestLadeSkab
 
             uut.StopCharge();
 
-            display.Received(1).ShowPhoneIsNotCharging();
+            display.Received(1).ShowStatusChargingIsOverloaded();
 
         }
 
@@ -108,52 +107,64 @@ namespace NUnitTestLadeSkab
             Assert.That(uut.IsConnected,Is.EqualTo(Result));
 
         }
+        [TestCase(501)]
+        [TestCase(500)]
+        [TestCase(499)]
+        public void Fuse(int var1)
+        {
+            FakeUsbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs {Current = var1});
+
+           display.DidNotReceive().ShowStatusChargingIsOverloaded();
+           display.DidNotReceive().ShowStatusChargingIsOverloaded();
+           display.Received(1).ShowStatusChargingIsOverloaded();
+           
+        }
         
     }
 
     public class FakeDisplay : IDisplay
     {
-        public void ShowConnectPhone()
+        public void ShowMessageConnectPhone()
         {
             Console.WriteLine("Tilslut telefon");
         }
 
-        public void ShowConnectionIsFailed()
+        public void ShowMessageConnectionIsFailed()
         {
             Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
         }
 
-        public void ShowOccupiedLocker()
+        public void ShowMessageOccupiedLocker()
         {
             Console.WriteLine("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
         }
 
-        public void ShowCorrectId()
+        public void ShowMessageCorrectId()
         {
             Console.WriteLine("Tag din telefon ud af skabet og luk døren");
         }
 
-        public void ShowWrongId()
+        public void ShowMessageWrongId()
         {
             Console.WriteLine("Forkert RFID tag");
         }
 
-        public void ShowScanRfid()
+        public void ShowMessageScanRfid()
         {
             Console.WriteLine("Indlæs Rfidtag");
         }
 
-        public void ShowChargingIsOverloaded()
+        public void ShowStatusChargingIsOverloaded()
         {
             Console.WriteLine("Der er sket en mulig kortslutning, ladning skal stoppes.");
         }
 
-        public void ShowPhoneIsCharging()
+        public void ShowStatusPhoneIsCharging()
         {
             Console.WriteLine("Telefonen oplades nu");
         }
 
-        public void ShowPhoneIsNotCharging()
+        public void ShowStatusPhoneIsFullyCharged()
         {
             Console.WriteLine("Der lades ikke. Tjek om opladeren er rigtig forbundet til telefonen.");
         }

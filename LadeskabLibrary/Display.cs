@@ -9,49 +9,49 @@ namespace LadeskabLibrary
     {
 
 
-        public void ShowConnectPhone()
+        public void ShowMessageConnectPhone()
         {
             Console.WriteLine("Tilslut telefon");
         }
 
-        public void ShowConnectionIsFailed()
+        public void ShowMessageConnectionIsFailed()
         {
             Console.WriteLine("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
         }
 
-        public void ShowOccupiedLocker()
+        public void ShowMessageOccupiedLocker()
         {
             Console.WriteLine("Skabet er låst. Brug dit RFID tag til at låse op.");
         }
 
-        public void ShowCorrectId()
+        public void ShowMessageCorrectId()
         {
-            Console.WriteLine("Tag din telefon ud af skabet og luk døren");
+            Console.WriteLine("Korrekt ID. Du kan tage din telefon ud af skabet og lukke døren");
         }
 
-        public void ShowWrongId()
+        public void ShowMessageWrongId()
         {
             Console.WriteLine("Forkert RFID tag");
         }
 
-        public void ShowScanRfid()
+        public void ShowMessageScanRfid()
         {
             Console.WriteLine("Indlæs Rfidtag");
         }
 
-        public void ShowChargingIsOverloaded()
+        public void ShowStatusChargingIsOverloaded()
         {
-            Console.WriteLine("Der er sket en mulig kortslutning, ladning skal stoppes.");
+            Console.WriteLine("Fejl under opladning. Ladning af telefon er stoppet. Kontakt servicepersonale");
         }
 
-        public void ShowPhoneIsCharging()
+        public void ShowStatusPhoneIsCharging()
         {
-            Console.WriteLine("Telefonen oplades nu");
+            Console.WriteLine("Telefonen oplades");
         }
 
-        public void ShowPhoneIsNotCharging()
+        public void ShowStatusPhoneIsFullyCharged()
         {
-            Console.WriteLine("Der lades ikke. Tjek om opladeren er rigtig forbundet til telefonen.");
+            Console.WriteLine("Telefon er fyldt opladet.");
         }
     }
 }

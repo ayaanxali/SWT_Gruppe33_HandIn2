@@ -6,14 +6,14 @@ namespace LadeskabLibrary
 {
     public interface IDisplay
     {
-        public void ShowConnectPhone();
-        public void ShowConnectionIsFailed();
-        public void ShowOccupiedLocker();
-        public void ShowCorrectId();
-        public void ShowWrongId();
-        public void ShowScanRfid();
-        public void ShowPhoneIsCharging();
-        public void ShowChargingIsOverloaded();
-        public void ShowPhoneIsNotCharging();
+        public void ShowMessageConnectPhone();
+        public void ShowMessageConnectionIsFailed();
+        public void ShowMessageOccupiedLocker();
+        public void ShowMessageCorrectId();
+        public void ShowMessageWrongId();
+        public void ShowMessageScanRfid();
+        public void ShowStatusPhoneIsCharging();
+        public void ShowStatusChargingIsOverloaded();
+        public void ShowStatusPhoneIsFullyCharged();
     }
 }

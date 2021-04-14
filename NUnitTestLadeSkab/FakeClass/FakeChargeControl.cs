@@ -32,7 +32,7 @@ namespace NUnitTestLadeSkab
         {
             chargerSimulator.StartCharge();
             StartChargeIsActivated = true; 
-            display.ShowPhoneIsCharging();
+            display.ShowStatusPhoneIsCharging();
         }
 
         public void StopCharge()

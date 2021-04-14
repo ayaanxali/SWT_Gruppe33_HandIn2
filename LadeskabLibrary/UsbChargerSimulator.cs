@@ -117,9 +117,5 @@ namespace LadeskabLibrary
     {
         CurrentValueEvent?.Invoke(this, new CurrentEventArgs() {Current = this.CurrentValue});
     }
-    //protected virtual void OnCharging(ChargingEventArg e)
-    //{
-    //    ChargingEvent?.Invoke(this,e);
-    //}
     }
 }
