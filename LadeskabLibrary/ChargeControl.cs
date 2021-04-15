@@ -40,9 +40,9 @@ namespace LadeskabLibrary
 
         public void Fuse()
         {
-            if (CurrentNow >= 501 && CurrentNow <= 750)
+            if (CurrentNow > 500 && CurrentNow <= 750)
             {
-                //StopCharge();
+                StopCharge();
                 display.ShowStatusChargingIsOverloaded();
             }
             else if (CurrentNow > 5 && CurrentNow <= 500)

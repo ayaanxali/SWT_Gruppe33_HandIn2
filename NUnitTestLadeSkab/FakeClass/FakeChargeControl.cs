@@ -10,7 +10,7 @@ namespace NUnitTestLadeSkab
 
         private bool _isConnected;
 
-        //public bool ConnectedStatus { get; set; } 
+        //private bool ConnectedStatus { get; set; } 
         //public event EventHandler<ChargingEventArg> ChargingEvent;
         public bool StartChargeIsActivated;
         public bool StopChargeIsActivated;
@@ -23,7 +23,6 @@ namespace NUnitTestLadeSkab
         public bool IsConnected()
         {
             //ConnectedStatus = _isConnected;
-
             return _isConnected;
 
         }
