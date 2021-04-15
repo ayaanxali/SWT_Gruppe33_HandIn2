@@ -15,26 +15,19 @@ namespace NUnitTestLadeSkab
         public IDoor Door;
         public IRfidReader rfidReader;
         public IDisplay display;
-        public IChargeControl ChargeControl;
         public IUsbCharger FakeCharger;
-        public ILogFile logFile;
-        public StationControl stationControl;
         public ChargeControl uut;
-        public ChargeControl uut2;
         public FakeUsbCharger FakeUsbCharger;
 
 
         [SetUp]
         public void Setup()
         {
-            Door = NSubstitute.Substitute.For<IDoor>();
-            rfidReader = NSubstitute.Substitute.For<IRfidReader>();
-           // UsbChargerSimo = NSubstitute.Substitute.For<IUsbCharger>();
+            //Door = NSubstitute.Substitute.For<IDoor>();
+            //rfidReader = NSubstitute.Substitute.For<IRfidReader>();
             display = NSubstitute.Substitute.For<IDisplay>();
             FakeUsbCharger = new FakeUsbCharger();
             FakeCharger = NSubstitute.Substitute.For<IUsbCharger>();
-            // fakeChargeControl = new FakeChargeControl(UsbChargerSimo,FakeDisplay);
-            //stationControl = new StationControl(rfidReader,Door,fakeChargeControl,display,logFile);
             uut = new ChargeControl(FakeUsbCharger,display);
         }
 
@@ -96,12 +89,13 @@ namespace NUnitTestLadeSkab
         }
 
         [TestCase(501)]
-        public void Fuse_Overload(double var1)
+        public void ChargeControl_FuseAndOverloadIsTrue_ShowStatusChargingIsOverloadedIsReceivedOne(double var1)
         {
             //FakeUsbCharger.SimulateConnected(true);
-            FakeUsbCharger.SimulateOverload(false);
+            FakeUsbCharger.SimulateOverload(true);
+            uut.StartCharge();
             //FakeUsbCharger.CurrentValueEvent += Raise.EventWith(new CurrentEventArgs {Current = var1});
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this,new CurrentEventArgs { Current = var1 });
+            //FakeCharger.CurrentValueEvent += Raise.EventWith(this,new CurrentEventArgs { Current = var1 });
             //eventet i faken virker ikke og skal fikses før vi kan komme videre. 
 
             //Assert.That(FakeUsbCharger.CurrentValue,Is.EqualTo(var1));
@@ -113,37 +107,36 @@ namespace NUnitTestLadeSkab
             //FakeCharger.Received(1).StopCharge();
 
             //display.DidNotReceive().ShowStatusChargingIsOverloaded();
-            display.DidNotReceive().ShowStatusChargingIsOverloaded();
-            //display.Received(1).ShowStatusChargingIsOverloaded();
+            //display.DidNotReceive().ShowStatusChargingIsOverloaded();
+            display.Received(1).ShowStatusChargingIsOverloaded();
 
         }
 
         [TestCase(500)]
         [TestCase(499)]
-        public void Fuse_Charging(double var1)
+        public void ChargeControl_FuseAndOverloadIsFalse_ShowStatusPhoneIsChargingIsReceivedOne(double var1)
         {
             FakeUsbCharger.SimulateOverload(false);
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
-            //FakeUsbCharger.CurrentValueEvent += Raise.Event(new CurrentEventArgs {Current = var1});
-            display.DidNotReceive().ShowStatusChargingIsOverloaded();
-            display.DidNotReceive().ShowStatusChargingIsOverloaded();
-            //display.Received(1).ShowStatusPhoneIsCharging();
-            //display.Received(1).ShowStatusPhoneIsCharging();
+            uut.StartCharge();
+            //FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
+
+            //display.DidNotReceive().ShowStatusChargingIsOverloaded();
+            //display.DidNotReceive().ShowStatusChargingIsOverloaded();
+            display.Received(1).ShowStatusPhoneIsCharging();
+            display.Received(1).ShowStatusPhoneIsCharging();
             //Assert.That(FakeUsbCharger.CurrentValue,Is.EqualTo(var1));
         }
 
         [TestCase(500)]
         public void ChargeControl_StartCharge_CurrentValueIs500(double var1)
         {
-            //FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
             uut.StartCharge();
             Assert.That(FakeUsbCharger.CurrentValue,Is.EqualTo(var1));
+            Assert.That(FakeUsbCharger.Connected,Is.True);
         }
         [TestCase(750)]
         public void ChargeControl_StartCharge_CurrentValueIsOverloadedCurrent(double var1)
         {
-            //FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
-            //FakeCharger.Received(1).StartCharge();
             FakeUsbCharger.SimulateOverload(true);
             uut.StartCharge();
             Assert.That(FakeUsbCharger.CurrentValue, Is.EqualTo(var1));
@@ -151,11 +144,18 @@ namespace NUnitTestLadeSkab
         [TestCase(0.0)]
         public void ChargeControl_StopCharge_CurrentValueIs0(double var1)
         {
-            //FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
-            //FakeCharger.Received(1).StartCharge();
             FakeUsbCharger.SimulateOverload(true);
             uut.StopCharge();
             Assert.That(FakeUsbCharger.CurrentValue, Is.EqualTo(var1));
+        }
+        [TestCase(0.0)]
+        public void ChargeControl_StopChargeAndConnectionIsFalse_CurrentValueIs0(double var1)
+        {
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
+            FakeUsbCharger.SimulateConnected(false);
+            FakeUsbCharger.SimulateOverload(false);
+            Assert.That(FakeCharger.CurrentValue, Is.EqualTo(var1));
+            //FakeCharger.Received(1).StartCharge();
         }
 
     }

@@ -45,7 +45,7 @@ namespace LadeskabLibrary
                 //StopCharge();
                 display.ShowStatusChargingIsOverloaded();
             }
-            else if (CurrentNow <= 500 && CurrentNow > 5)
+            else if (CurrentNow > 5 && CurrentNow <= 500)
             {
                 display.ShowStatusPhoneIsCharging();
             }
