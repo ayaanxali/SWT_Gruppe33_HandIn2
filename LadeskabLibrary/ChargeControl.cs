@@ -49,7 +49,7 @@ namespace LadeskabLibrary
             {
                 display.ShowStatusPhoneIsCharging();
             }
-            else if(0 <= CurrentNow && CurrentNow <= 5)
+            else if(0 < CurrentNow && CurrentNow <= 5)
             {
                 display.ShowStatusPhoneIsFullyCharged();
             }

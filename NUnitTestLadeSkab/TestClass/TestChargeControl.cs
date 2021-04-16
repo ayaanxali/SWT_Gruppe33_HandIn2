@@ -9,78 +9,109 @@ namespace NUnitTestLadeSkab
 {
     public class TestChargerControl
     {
-        private FakeChargeControl fakeChargeControl;
-        
-
-        public IDoor Door;
-        public IRfidReader rfidReader;
         public IDisplay display;
         public IUsbCharger FakeCharger;
         public ChargeControl uut;
-        //public FakeUsbCharger FakeUsbCharger;
+       
 
 
         [SetUp]
         public void Setup()
         {
-            //Door = NSubstitute.Substitute.For<IDoor>();
-            //rfidReader = NSubstitute.Substitute.For<IRfidReader>();
             display = NSubstitute.Substitute.For<IDisplay>();
-            //FakeUsbCharger = new FakeUsbCharger();
             FakeCharger = NSubstitute.Substitute.For<IUsbCharger>();
-            //uut = new ChargeControl(FakeUsbCharger,display);
             uut = new ChargeControl(FakeCharger,display);
         }
 
-        [TestCase(500)]
+        
         [TestCase(499)]
-        public void ChargeControl_PhoneIsConnected_StartCharging(double var1)
+        [TestCase(500)]
+        public void ChargeControl_WhenCurrentIsHigh_StartCharging(double current)
         {
-            //act
+            //arrange
             uut.StartCharge();
 
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
+            //act
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = current });
 
             //assert
             FakeCharger.Received(1).StartCharge();
+            FakeCharger.Received(1).StartCharge();
         }
         [TestCase(5)]
-        [TestCase(0)]
-        public void ChargeControl_PhoneIsDisconnected_StopCharging(double var1)
+        [TestCase(1)]
+        public void ChargeControl_WhenCurrentIsLow_StopCharging(double var1)
         {
-            //act
+            //arrange
             uut.StopCharge();
 
+            //act
             FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
             
             //assert
+            FakeCharger.Received(1).StopCharge();
             FakeCharger.Received(1).StopCharge();
         }
 
         [TestCase(500)]
         [TestCase(499)]
-        public void ChargeControl_PhoneIsConnected_ShowPhoneIsChargingIsReceivedOne(double var1)
+        [TestCase(6)]
+        public void ChargeControl_WhenCurrentIsHigh_ShowPhoneIsChargingIsReceivedOne(double current)
         {
-            //act
+            //arrange
             uut.StartCharge();
 
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
+            //act
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = current });
 
             //assert
             display.Received(1).ShowStatusPhoneIsCharging();
+            display.Received(1).ShowStatusPhoneIsCharging();
+            display.Received(1).ShowStatusPhoneIsCharging();
         }
-        
+       
+        [TestCase(4)]
         [TestCase(5)]
-        [TestCase(0)]
-        public void ChargeControl_PhoneIsDisconnected_ShowPhoneIsFullyChargedIsReceivedOne(double var1)
+        public void ChargeControl_WhenCurrentIsHigh_ShowPhoneIsChargingDidNotReceived(double current)
         {
+            //arrange
+            uut.StartCharge();
+
             //act
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = current });
+
+            //assert
+            display.DidNotReceive().ShowStatusPhoneIsCharging();
+            display.DidNotReceive().ShowStatusPhoneIsCharging();
+        }
+
+        [TestCase(5)]
+        [TestCase(1)]
+        public void ChargeControl_WhenCurrentIsFiveOrUnder_ShowPhoneIsFullyChargedIsReceivedOne(double current)
+        {
+            //arrange
             uut.StopCharge();
 
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
+            //act
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = current });
 
             //assert
             display.Received(1).ShowStatusPhoneIsFullyCharged();
+            display.Received(1).ShowStatusPhoneIsFullyCharged();
+        }
+        [TestCase(6)]
+        [TestCase(0)]
+        public void ChargeControl_WhenCurrentIsFiveOrUnder_ShowPhoneIsFullyChargedDidNotReceivedOne(double current)
+        {
+            //arrange
+            uut.StopCharge();
+
+            //act
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = current });
+
+            //assert
+            display.DidNotReceive().ShowStatusPhoneIsFullyCharged();
+            display.DidNotReceive().ShowStatusPhoneIsFullyCharged();
         }
 
         [TestCase(false)]
@@ -97,12 +128,13 @@ namespace NUnitTestLadeSkab
         }
 
         [TestCase(501)]
-        public void ChargeControl_FuseAndOverloadIsTrue_ShowStatusChargingIsOverloadedIsReceivedOne(double var1)
+        public void ChargeControl_WhenCurrentIsOver500_ShowStatusChargingIsOverloadedReceivedOne(double current)
         {
-            //act
+            //arrange
             uut.StartCharge();
             
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this,new CurrentEventArgs { Current = var1 });
+            //act
+            FakeCharger.CurrentValueEvent += Raise.EventWith(this,new CurrentEventArgs { Current = current });
             
             //assert
             display.Received(1).ShowStatusChargingIsOverloaded();
@@ -110,58 +142,17 @@ namespace NUnitTestLadeSkab
 
         [TestCase(500)]
         [TestCase(499)]
-        [TestCase(6)]
-        public void ChargeControl_FuseAndOverloadIsFalse_ShowStatusPhoneIsChargingIsReceivedOne(double var1)
+        public void ChargeControl_WhenCurrent500orUnder_ShowStatusChargingIsOverLoadedDidNotReceivedOne(double var1)
         {
-            //act
+            //arrange
             uut.StartCharge();
 
+            //act
             FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
 
             //assert
             display.DidNotReceive().ShowStatusChargingIsOverloaded();
             display.DidNotReceive().ShowStatusChargingIsOverloaded();
-            display.Received(1).ShowStatusPhoneIsCharging();
-        }
-
-        [TestCase(4)]
-        public void ChargeControl_FuseAndOverloadIsFalse_ShowStatusPhoneIsChargingDidNotReceivedOne(double var1)
-        {
-            //act
-            uut.StartCharge();
-
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
-
-            //assert
-            display.DidNotReceive().ShowStatusPhoneIsCharging();
-        }
-
-        [TestCase(5)]
-        [TestCase(4)]
-        [TestCase(0)]
-        public void ChargeControl_FuseAnd_ShowStatusPhoneIsFullyChargedIsReceivedOne(double var1)
-        {
-            //act
-            uut.StartCharge();
-
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
-
-            //assert
-            display.Received(1).ShowStatusPhoneIsFullyCharged();
-            display.Received(1).ShowStatusPhoneIsFullyCharged();
-            display.Received(1).ShowStatusPhoneIsFullyCharged();
-        }
-
-        [TestCase(6)]
-        public void ChargeControl_FuseAnd_ShowStatusPhoneIsFullyChargedDidNotReceivedOne(double var1)
-        {
-            //act
-            uut.StartCharge();
-
-            FakeCharger.CurrentValueEvent += Raise.EventWith(this, new CurrentEventArgs { Current = var1 });
-
-            //assert
-            display.DidNotReceive().ShowStatusPhoneIsFullyCharged();
         }
 
         [TestCase(501)]

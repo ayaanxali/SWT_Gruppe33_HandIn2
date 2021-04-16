@@ -63,20 +63,24 @@ namespace NUnitTestLadeSkab
             }
             Assert.That(readId, Does.Contain(Time + ": Skab låst med RFID: " + id));
         }
+        /// <summary>
+        /// The test result is what we expects but the test fails. 
+        /// </summary>
         //[Test]
         //public void UnLockDoorLog_WriteLogToFile_FileContainsWhatsWritten()
         //{
         //    int id = 1200;
+        //    File.Delete(logFileName);
         //    uut.UnLockDoorLog(id);
         //    string readId;
-        //    DateTime Time = new DateTime(2021, 03, 24, 09, 41, 49);
+        //   // DateTime Time = DateTime.Now;
         //    // 24 - 03 - 2021 09:41:49
         //    using (StreamReader reader = new StreamReader(File.OpenRead(logFileName)))
         //    {
         //        //readId = id.ToString();
         //        readId = reader.ReadLine();
         //    }
-        //    Assert.That(readId, Does.Contain(Time + ": Skab låst med RFID: " + id));
+        //    Assert.That(readId, Does.Contain(DateTime.Now + ": Skab låst med RFID: " +id));
         //}
 
         [Test]
